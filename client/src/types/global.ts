@@ -11,14 +11,16 @@ export type TasksType = {
     _id?: number
 }
 
-export type WorkshopType = {
+export type WorkshopsType = {
     name: string
-	object: string[]
+    object: string[]
+    _id?: number
 }
 
 export type PersonType = {
     name: string,
 	surname: string,
 	phone: string,
-	position: string
+    position: string
+    _id?: number
 }

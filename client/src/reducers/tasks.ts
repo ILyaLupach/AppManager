@@ -1,7 +1,7 @@
-import { TasksType } from '../types/global';
-import { ActionType } from '../types/actions';
-import { LOADING_TASKS, GET_ALL_TASKS } from '../actions/actionTypes';
-import { TasksStoreType } from '../types/store';
+import { TasksType } from '../types/global'
+import { ActionType } from '../types/actions'
+import { LOADING_TASKS, GET_ALL_TASKS } from '../actions/actionTypes'
+import { TasksStoreType } from '../types/store'
 
 const initialState: TasksStoreType = {
     loading: true,
@@ -14,15 +14,13 @@ export default (state: TasksStoreType = initialState, action: ActionType<TasksSt
             return {
                 ...state,
                 tasks: action.payload
-            };
-
+            }
         case LOADING_TASKS:
             return {
                 ...state,
                 loading: action.payload,
-            };
-
+            }
         default:
-            return state;
+            return state
     }
 }

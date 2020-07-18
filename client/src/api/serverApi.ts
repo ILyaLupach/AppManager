@@ -1,4 +1,4 @@
-import { TasksType } from '../types/global';
+import { PersonType, TasksType, WorkshopsType } from '../types/global'
 
 export default class ServerApi {
 
@@ -6,40 +6,39 @@ export default class ServerApi {
         const res = await fetch(url)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(response.statusText);
+                    throw new Error(response.statusText)
                 }
-                return response;
+                return response
             }).then(response => response.json())
             .catch(err => console.log("----------", " ", err))
-        return await res;
-    };
-
+        return await res
+    }
 
     getAllTasks = async () => {
         const tasks = await this.getResource("/tasks")
             .then((res) => {
                 return res
             })
-        return await tasks;
-    };
+        return await tasks
+    }
 
     getAllWorkshops = async () => {
         const workshops = this.getResource("/workshops")
             .then((res) => {
                 return res
             })
-        return await workshops;
-    };
+        return await workshops
+    }
 
     getAllPersons = async () => {
         const persons = await this.getResource("/persons")
             .then((res) => {
                 return res
             }).catch(err => console.log("----------", " ", err))
-        return await persons;
-    };
+        return await persons
+    }
 
-    taskPushTasks = async (data: any) => {
+    taskPushTasks = async (data: TasksType) => {
         const push = await fetch("/tasks", {
             method: "POST",
             headers: {
@@ -48,10 +47,10 @@ export default class ServerApi {
             },
             body: JSON.stringify(data)
         })
-        return await push
+        return push
     }
 
-    addNewPerson = async (data: any) => {
+    addNewPerson = async (data: PersonType) => {
         const person = await fetch("/persons", {
             method: "POST",
             headers: {
@@ -60,10 +59,10 @@ export default class ServerApi {
             },
             body: JSON.stringify(data)
         })
-        return await person
+        return person
     }
 
-    addNewWorkShops = async (data: any) => {
+    addNewWorkshops = async (data: WorkshopsType) => {
         const workshop = await fetch("/workshops", {
             method: "POST",
             headers: {
@@ -72,7 +71,7 @@ export default class ServerApi {
             },
             body: JSON.stringify(data)
         })
-        return await workshop
+        return workshop
     }
 
     deleteItem = (id: any, url: string) => {

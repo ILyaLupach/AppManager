@@ -1,0 +1,48 @@
+.nav-drawer {
+    &__radio-buttom {
+        cursor: pointer;
+        &:hover {
+            background-color: #d4f7ff;
+        }
+    }
+    &__filter {
+        align-items: center;
+        height: 48px;
+        min-height: 48px !important;
+        &:hover {
+            background-color: #d4f7ff;
+        }
+    }
+    .MuiButtonBase-root:hover {
+        background-color: #d4f7ff;
+    }
+    .MuiAccordion-root {
+        width: 260px;
+        box-shadow: none;
+        &::before {
+            display: none;
+        }
+    }
+    .MuiListItemIcon-root {
+        display: flex;
+        align-items: center;
+    }
+    .MuiAccordionSummary-content {
+        margin: 0;
+    }
+    .MuiAccordionDetails-root {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .MuiIconButton-label {
+        color: rgba(0, 0, 0, 0.54);
+    }
+    .MuiAccordion-root.Mui-expanded {
+        margin: 0;
+    }
+    .MuiAccordionDetails-root {
+        padding: 0;
+        padding-left: 16px;
+    }
+}

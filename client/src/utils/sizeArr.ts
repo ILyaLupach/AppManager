@@ -1,4 +1,4 @@
-import { TasksType } from '../types/global';
+import { TasksType } from '../types/global'
 
 const sizeArr = (tasks: TasksType[], length: number): TasksType[] => {
     if(tasks && tasks.length > length) {
@@ -8,4 +8,4 @@ const sizeArr = (tasks: TasksType[], length: number): TasksType[] => {
     else return tasks
 }
 
-export default sizeArr;
+export default sizeArr
