@@ -1,0 +1,18 @@
+.header {
+    position: fixed;
+    top: 0;
+    height: 45px;
+    width: 100%;
+    z-index: 10;
+    background: #00a5d3;
+    &__navigation  {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+    }
+}
+
+.page {
+    margin-top: 45px;
+    height: calc(100vh - 45px);
+}
