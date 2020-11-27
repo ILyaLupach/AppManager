@@ -10,48 +10,48 @@ import DialogActions from '@material-ui/core/DialogActions';
 
 
 export default function PersonsItem({ name, surname, phone, position, panel, _id, deleteItem, updatePersons }: any) {
-    const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
-    const handleChange = (panel: any) => (event: any, isExpanded: any) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+  const handleChange = (panel: any) => (event: any, isExpanded: any) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
-    const deletePerson = async () => {
-        // deleteItem(_id, "persons");
-        // setTimeout(() => {
-        //     updatePersons();
-        // }, 2000);
-    }
+  const deletePerson = async () => {
+    // deleteItem(_id, "persons");
+    // setTimeout(() => {
+    //     updatePersons();
+    // }, 2000);
+  }
 
-    return (
-        <>
-            <ExpansionPanel expanded={expanded === panel} onChange={handleChange(panel)}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                >
-                    <Typography >
-                        <span className="workShopItem--person"> {`${surname} ${name}`} </span>
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <div className="personDetails">
-                        <span ><a className={"persotDetails-phone"} href={`tel:${phone}`}> {`Телефон:  ${phone}`} </ a></span>
-                        <span>{`Должность:  ${position}`}</span>
-                    </div>
-                </ExpansionPanelDetails>
-                <DialogActions>
-                    <EditPerson
-                        name={name} surname={surname} phone={phone}
-                        position={position} id={_id}
-                        updatePersons={updatePersons}
-                    />
-                    <Button onClick={deletePerson} color="primary">
-                        <h5>удалить</h5>
-                    </Button>
-                </DialogActions>
-            </ExpansionPanel>
-        </>
-    )
+  return (
+    <>
+      <ExpansionPanel expanded={expanded === panel} onChange={handleChange(panel)}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography >
+            <span className=''> {`${surname} ${name}`} </span>
+          </Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <div className="persons-list__details">
+            <span ><a className={"persons-list__details-phone"} href={`tel:${phone}`}> {`Телефон:  ${phone}`} </ a></span>
+            <span>{`Должность:  ${position}`}</span>
+          </div>
+        </ExpansionPanelDetails>
+        <DialogActions>
+          <EditPerson
+            name={name} surname={surname} phone={phone}
+            position={position} id={_id}
+            updatePersons={updatePersons}
+          />
+          <Button onClick={deletePerson} color="primary">
+            <h5>удалить</h5>
+          </Button>
+        </DialogActions>
+      </ExpansionPanel>
+    </>
+  )
 }

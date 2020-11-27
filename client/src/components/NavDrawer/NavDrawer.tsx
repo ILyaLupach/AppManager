@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, withRouter, RouteComponentProps, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import clsx from 'clsx'
@@ -17,6 +17,8 @@ import Filter from './components/Filter'
 import Search from './components/Search'
 
 import './NavDrawer.scss'
+import { isMobileOnly } from 'react-device-detect'
+import FixedBtn from './components/FixedBtn'
 
 const drawerWidth = 260
 
@@ -32,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 		drawerOpen: {
 			width: drawerWidth,
+			left: 'auto',
 			transition: theme.transitions.create('all', {
 				easing: theme.transitions.easing.sharp,
 				duration: theme.transitions.duration.enteringScreen,
@@ -44,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			}),
 			width: 60,
 			overflowX: 'hidden',
+			left: isMobileOnly ? -60 : 'auto',
 		},
 	}),
 )
@@ -53,8 +57,8 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 	const classes = useStyles()
 	const dispatch = useDispatch()
 
-	const [open, setOpen] = React.useState(false)
-	const [activeLink, setActiveLink] = React.useState('completed')
+	const [open, setOpen] = useState(false)
+	const [activeLink, setActiveLink] = useState('completed')
 
 	useEffect(() => {
 		dispatch(getAllWorkshops())
@@ -73,12 +77,8 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 		}
 	}, [location.pathname])
 
-	const handleDrawerOpen = (event: React.MouseEvent<{}>): void => {
-		setOpen(true)
-	}
-
-	const handleDrawerClose = (event: React.MouseEvent<{}>): void => {
-		setOpen(false)
+	const isOpenHandler = () => {
+		setOpen(!open)
 	}
 
 	const checkActiveLink = (link: string): 'inherit' | 'error' => (
@@ -88,8 +88,8 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 	return (
 		<nav
 			className={clsx('nav-drawer', classes.root)}
-			onMouseEnter={handleDrawerOpen}
-			onMouseLeave={handleDrawerClose}
+			onMouseEnter={() => setOpen(true)}
+			onMouseLeave={() => setOpen(false)}
 		>
 			<Drawer
 				variant="permanent"
@@ -145,6 +145,7 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 					</ListItem>
 				</List>
 			</Drawer>
+			{isMobileOnly && <FixedBtn isOpenHandler={isOpenHandler} isOpen={open}/>}
 		</nav>
 	)
 }

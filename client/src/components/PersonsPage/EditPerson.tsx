@@ -9,13 +9,6 @@ import TextField from '@material-ui/core/TextField'
 import api from "../../api"
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'flex',
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
   root: {
     '& > *': {
       margin: theme.spacing(1),
@@ -25,8 +18,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function EditPerson( {name, surname, phone, position, id, updatePersons}: any ) {
-  const classes = useStyles();
+export default function EditPerson({ name, surname, phone, position, id, updatePersons }: any) {
+  const classes = useStyles()
 
   const [open, setOpen] = React.useState(false);
 
@@ -35,7 +28,7 @@ export default function EditPerson( {name, surname, phone, position, id, updateP
     surname: surname,
     phone: phone,
     position: position
-})
+  })
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,23 +77,19 @@ export default function EditPerson( {name, surname, phone, position, id, updateP
 
   return (
     <>
-        <Button
-          onClick={handleClickOpen}
-          color="primary">
-                    <h5>редактировать</h5>
-        </Button>
-
-
+      <Button
+        onClick={handleClickOpen}
+        color="primary">
+        <h5>редактировать</h5>
+      </Button>
       <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogContent>
-            <form className={classes.root} noValidate autoComplete="off">
-
-              <TextField value={editPerson.surname}  onChange={handleChange} id="surname" label="Фамилия" />
-              <TextField value={editPerson.name}  onChange={handleChange} id="name" label="Имя" />
-              <TextField value={editPerson.phone}  onChange={handleChange} id="phone" label="Телефон" />
-              <TextField value={editPerson.position}  onChange={handleChange} id="position" label="Должность" />
-            </form>
-
+          <form className={classes.root} noValidate autoComplete="off">
+            <TextField value={editPerson.surname} onChange={handleChange} id="surname" label="Фамилия" />
+            <TextField value={editPerson.name} onChange={handleChange} id="name" label="Имя" />
+            <TextField value={editPerson.phone} onChange={handleChange} id="phone" label="Телефон" />
+            <TextField value={editPerson.position} onChange={handleChange} id="position" label="Должность" />
+          </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

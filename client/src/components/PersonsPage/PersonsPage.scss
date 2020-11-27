@@ -1,31 +1,36 @@
-.personslist {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: column;
-    padding: 20px;
-    width: 40%;
-}
-
-.personDetails {
+.persons-list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 20px;
+  width: 40%;
+  &__title {
+    position: absolute;
+    top: 30px;
+    right: 25px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  &__details-phone {
+    color: green;
+  }
+  &__details {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     width: 75vw;
-}
-
-.personDetails .persotDetails-phone {
-    color: green;
+  }
 }
 
 .MuiExpansionPanel-rounded {
-    width: 100%;
+  width: 100%;
 }
 
 @media (max-width: 1200px) {
-    .personslist {
-        padding: 60px 20px 70px 20px;
-        width: auto;
-    }
+  .persons-list {
+    padding: 100px 20px 80px 20px;
+    width: auto;
+  }
 }

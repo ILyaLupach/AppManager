@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react'
+import { isMobileOnly } from 'react-device-detect'
+import clsx from 'clsx'
 import { useSelector, useDispatch } from 'react-redux'
 import { getAllPersons } from "../../actions"
 import { PersonType } from '../../types/global'
@@ -7,32 +9,35 @@ import { MiniPreloader } from '../Preloader'
 import PersonsItem from './PersonItem'
 
 import './PersonsPage.scss'
+import AddNewPerson from './AddNewPerson'
 
 const PersonsPage: React.FC = () => {
-    const dispatch = useDispatch()
-    const { persons, loading }: PersonsStoreType = useSelector(({ persons }: StoreType) => persons)
+  const dispatch = useDispatch()
+  const { persons, loading }: PersonsStoreType = useSelector(({ persons }: StoreType) => persons)
 
-    useEffect(() => {
-        dispatch(getAllPersons())
-    }, [])
+  useEffect(() => {
+    dispatch(getAllPersons())
+  }, [])
 
-    useEffect(() => {
-        console.log(persons)
-    }, [persons])
+  useEffect(() => {
+    console.log(persons)
+  }, [persons])
 
-    return loading || !persons.length ? <MiniPreloader /> : (
-        <section className='page'>
-            <div className='personslist'>
-                {(persons as PersonType[]).map((item: PersonType, i: number) => (
-                    <PersonsItem
-                        key={item._id}
-                        panel={`panel${i}`}
-                        {...item}
-                    />
-                ))}
-            </div>
-        </section>
-    )
+  return loading || !persons.length ? <MiniPreloader /> : (
+    <section className={isMobileOnly ? 'mobile-page' : 'page'}>
+      <div className='persons-list'>
+        <h2 className="persons-list__title">Персонал КИПиСА</h2>
+        {(persons as PersonType[]).map((item: PersonType, i: number) => (
+          <PersonsItem
+            key={item._id}
+            panel={`panel${i}`}
+            {...item}
+          />
+        ))}
+      </div>
+      <AddNewPerson>Добавить нового работника</AddNewPerson>
+    </section>
+  )
 }
 
 export default PersonsPage
