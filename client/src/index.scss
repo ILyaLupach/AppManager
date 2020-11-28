@@ -27,3 +27,20 @@ a {
   padding: 0;
   margin: 0;
 }
+
+#root {
+  overflow: hidden;
+}
+
+a:active,
+a:focus,
+input,
+textarea,
+input:active,
+textarea:active,
+input:focus,
+textarea:focus,
+button:active,
+button:focus {
+  outline:none;
+}

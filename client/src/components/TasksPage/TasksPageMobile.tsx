@@ -1,76 +1,71 @@
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
-import { Accordion } from '@material-ui/core';
-import { AccordionSummary } from '@material-ui/core';
-import { AccordionDetails } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux'
 import sortBy from '../../utils/sortBy'
 import { getAllTasks } from '../../actions'
 import { FilterStoreType, StoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
 import sizeArr from '../../utils/sizeArr'
+import AddNewTasks from './components/NewTaskForm';
+import { MiniPreloader } from '../Preloader';
+import { formatTime } from '../../utils/formatTime';
+import MobileTaskItem from './components/MobileTaskItem';
 
 export default function ControlledAccordions() {
-  const [expanded, setExpanded] = React.useState<string | false>(false)
+  const [isOpenAddForm, setIsOpenAddForm] = useState(false)
+  const [changeTask, setChangeTask] =
+    useState<{ isOpen: boolean, task: TasksType | null }>({ isOpen: false, task: null })
 
   const { tasks, loading }: TasksStoreType = useSelector(({ tasks }: StoreType) => tasks)
   const { filterBy, searchQuery }: FilterStoreType =
     useSelector(({ filter }: StoreType) => filter)
   const dispatch = useDispatch()
 
+  const pageRef = useRef<any>(null)
+
   useEffect(() => {
-    dispatch(getAllTasks())
-  }, [])
+    !tasks.length && dispatch(getAllTasks())
+    window.scrollTo(0, pageRef?.current?.scrollHeight)
+  }, [tasks.length])
 
-  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false)
-  }
+  const openAddForm = () => setIsOpenAddForm(true)
+  const closeAddForm = () => setIsOpenAddForm(false)
 
-  const formatTime = (time: number): string => {
-    if (time < 10) {
-      return "0" + time
-    }
-    else return '' + time
+  const openEditForm = (task: TasksType) => setChangeTask({ isOpen: true, task })
+  const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
+
+  const deleteTasks = (task: TasksType) => {
+    console.log('delete: ', task.object)
   }
 
   const validTasks: TasksType[] | null =
-    sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['desc']), filterBy, searchQuery)
-
-  const getTimeWork = (start: Date, finish: Date) => {
-    const timeStart = `${formatTime(new Date(start).getHours())}:${formatTime(new Date(start).getMinutes())}`
-    const timeFinish = `${formatTime(new Date(finish).getHours())}:${formatTime(new Date(finish).getMinutes())}`
-    return `${timeStart} - ${timeFinish}`
-  }
+    sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['asc']), filterBy, searchQuery)
 
   return (
-    <div className='mobile-tasks-page'>
-      {validTasks?.map(task => (
-        <Accordion
-          key={task._id}
-          onChange={handleChange(`panel${task._id}`)}
-          className='mobile-tasks-page__task'
-        >
-          <AccordionSummary>
-            <div className='mobile-tasks-page__header'>
-              <span className='mobile-tasks-page__time'>
-                {getTimeWork(task.start, task.finish)}
-              </span>
-              <span className='mobile-tasks-page__position'>{task.position}</span>
-              <span className='mobile-tasks-page__object'>{task.object}</span>
-              <span className='mobile-tasks-page__person'>{task.name.join(", ")}</span>
-            </div>
-          </AccordionSummary>
-          <AccordionDetails>
-            <span className='mobile-tasks-page__subtitle'> Неисправность: </span>
-            <span className=''>{task.failure}</span>
-            <span className='mobile-tasks-page__subtitle'> Корректирующие действия: </span>
-            <span className=''>{task.failure}</span>
-          </AccordionDetails>
-        </Accordion>
+    <div className='mobile-tasks-page' ref={pageRef}>
+      {validTasks?.map((task, i, arr) => (
+        <Fragment key={task._id}>
+          {new Date(task.date).getDate() !== new Date(arr[i - 1]?.date).getDate() && (
+            <span className="mobile-tasks-page__date-title">
+              {`${formatTime(new Date(task.date).getDate())} / ${formatTime(new Date(task.date).getMonth() + 1)} / ${new Date(task.date).getFullYear()}`}
+            </span>
+          )}
+          <MobileTaskItem
+            task={task}
+            deleteTasks={deleteTasks}
+            openEditForm={openEditForm}
+          />
+        </Fragment>
       ))}
-      <button className='mobile-tasks-page__add-btn'>
+      <button
+        className='mobile-tasks-page__add-btn'
+        onClick={openAddForm}
+      >
         Добавить новую задачу
       </button>
+      {isOpenAddForm && <AddNewTasks onClose={closeAddForm} />}
+      {changeTask.isOpen && <AddNewTasks onClose={closeEditForm} prevTask={changeTask.task} />}
+      {loading && <MiniPreloader />}
     </div >
-  );
+  )
 }

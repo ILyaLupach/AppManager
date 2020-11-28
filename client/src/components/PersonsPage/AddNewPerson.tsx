@@ -79,7 +79,7 @@ const AddNewPerson = ({ updatePersons, className }: any) => {
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
+  }
 
   const handlePost = () => {
     const { name, surname, phone, position } = newPerson;
@@ -110,12 +110,12 @@ const AddNewPerson = ({ updatePersons, className }: any) => {
 
   return (
     <>
-      <Button
+      <button
         className={isMobileOnly ? 'mobile-tasks-page__add-btn' : 'desktop-tasks-page__add-btn'}
         onClick={handleClickOpen}
       >
         Добавить нового работника
-        </Button>
+      </button>
       <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogContent>
           {complited ? <Complited /> :

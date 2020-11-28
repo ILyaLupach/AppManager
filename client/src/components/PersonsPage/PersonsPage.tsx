@@ -19,10 +19,6 @@ const PersonsPage: React.FC = () => {
     dispatch(getAllPersons())
   }, [])
 
-  useEffect(() => {
-    console.log(persons)
-  }, [persons])
-
   return loading || !persons.length ? <MiniPreloader /> : (
     <section className={isMobileOnly ? 'mobile-page' : 'page'}>
       <div className='persons-list'>

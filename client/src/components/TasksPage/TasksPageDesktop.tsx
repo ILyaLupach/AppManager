@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { withStyles, Theme } from '@material-ui/core/styles'
@@ -11,11 +11,14 @@ import TableRow from '@material-ui/core/TableRow'
 import sortBy from '../../utils/sortBy'
 import { getAllTasks } from '../../actions'
 import { MiniPreloader } from '../Preloader'
-
-import './TasksPage.scss'
-
 import { StoreType, FilterStoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
+import AddNewTasks from './components/NewTaskForm'
+import sizeArr from '../../utils/sizeArr'
+
+import './TasksPage.scss'
+import DesktopTaskItem from './components/DesktopTaskItem'
+
 
 const StyledTableCell = withStyles((theme: Theme) => ({
   head: {
@@ -31,39 +34,34 @@ const StyledTableCell = withStyles((theme: Theme) => ({
   },
 }))(TableCell)
 
-const StyledTableRow = withStyles((theme: Theme) => ({
-  root: {
-    height: '100%',
-    '&:nth-of-type(odd)': {
-      backgroundColor: 'rgba(231, 231, 231, .3)',
-    },
-    '&:hover': {
-      backgroundColor: '#d4f7ff',
-    },
-  },
-}))(TableRow)
-
 const TasksPageDesktop: React.FC = () => {
+  const [isOpenAddForm, setIsOpenAddForm] = useState(false)
+  const [changeTask, setChangeTask] =
+    useState<{ isOpen: boolean, task: TasksType | null }>({ isOpen: false, task: null })
+
   const { tasks, loading }: TasksStoreType = useSelector(({ tasks }: StoreType) => tasks)
   const { filterBy, searchQuery }: FilterStoreType =
     useSelector(({ filter }: StoreType) => filter)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getAllTasks())
-  }, [])
+    !tasks.length && dispatch(getAllTasks())
+  }, [tasks.length])
 
-  const formatTime = (time: number): string => {
-    if (time < 10) {
-      return "0" + time
-    }
-    else return '' + time
+  const openAddForm = () => setIsOpenAddForm(true)
+  const closeAddForm = () => setIsOpenAddForm(false)
+
+  const openEditForm = (task: TasksType) => setChangeTask({ isOpen: true, task })
+  const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
+
+  const deleteTasks = (task: TasksType) => {
+    console.log('delete: ', task.object)
   }
 
   const validTasks: TasksType[] | null =
-    sortBy(_.orderBy(tasks, ['date'], ['desc']), filterBy, searchQuery)
+    sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['desc']), filterBy, searchQuery)
 
-  return loading ? <MiniPreloader /> : (
+  return (
     <section className='page desktop-tasks-page'>
       <TableContainer style={{ height: '100%' }}>
         <Table stickyHeader aria-label="customized table">
@@ -71,52 +69,42 @@ const TasksPageDesktop: React.FC = () => {
             <TableRow>
               <StyledTableCell style={{ minWidth: 185 }} align="left">
                 Время
-                        </StyledTableCell>
+              </StyledTableCell>
               <StyledTableCell style={{ minWidth: 220 }} align="left">
                 Ф.И.О. работников
-                        </StyledTableCell>
+              </StyledTableCell>
               <StyledTableCell style={{ minWidth: 220 }} align="left">
                 Цех
-                        </StyledTableCell>
+              </StyledTableCell>
               <StyledTableCell style={{ minWidth: 220 }} align="left">
                 Проблема
-                        </StyledTableCell>
+              </StyledTableCell>
               <StyledTableCell style={{ minWidth: 200 }} align="left">
                 Решение
-                        </StyledTableCell>
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {validTasks?.map(task => (
-              <StyledTableRow key={task._id} onDoubleClick={() => console.log(task)}>
-                <StyledTableCell align="left">
-                  <strong>
-                    {`${formatTime(new Date(task.date).getDate())}/${formatTime(new Date(task.date).getMonth() + 1)}/${new Date(task.date).getFullYear()}`}
-                  </strong> &nbsp;&nbsp;
-                                    <span>
-                    {`${formatTime(new Date(task.start).getHours())}:${formatTime(new Date(task.start).getMinutes())} - ${formatTime(new Date(task.finish).getHours())}:${formatTime(new Date(task.finish).getMinutes())}`}
-                  </span>
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {task.name.join(", ")}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {`${task.position} (${task.object})`}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {task.failure}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {task.fix}
-                </StyledTableCell>
-              </StyledTableRow>
+              <DesktopTaskItem
+                key={task._id}
+                task={task}
+                openEditForm={openEditForm}
+                deleteTasks={deleteTasks}
+              />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <button className='desktop-tasks-page__add-btn'>
+      <button
+        className='desktop-tasks-page__add-btn'
+        onClick={openAddForm}
+      >
         Добавить новую задачу
       </button>
+      {isOpenAddForm && <AddNewTasks onClose={closeAddForm} />}
+      {changeTask.isOpen && <AddNewTasks onClose={closeEditForm} prevTask={changeTask.task} />}
+      {loading && <MiniPreloader />}
     </section>
   )
 }

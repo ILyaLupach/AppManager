@@ -28,6 +28,10 @@
   width: 100%;
 }
 
+.MuiDialog-root {
+	z-index: 9999;
+}
+
 @media (max-width: 1200px) {
   .persons-list {
     padding: 100px 20px 80px 20px;
