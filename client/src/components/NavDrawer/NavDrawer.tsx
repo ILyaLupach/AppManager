@@ -12,13 +12,13 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ReceiptIcon from '@material-ui/icons/Receipt'
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { getAllWorkshops } from '../../actions'
 import Filter from './components/Filter'
 import Search from './components/Search'
 
 import './NavDrawer.scss'
 import { isMobileOnly } from 'react-device-detect'
 import FixedBtn from './components/FixedBtn'
+import { getAllWorkshops } from '../../actions/workshopsActions'
 
 const drawerWidth = 260
 

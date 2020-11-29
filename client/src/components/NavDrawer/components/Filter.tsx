@@ -13,69 +13,70 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import { WorkshopsType } from '../../../types/global'
 import { StoreType, FilterStoreType } from '../../../types/store'
-import { getAllWorkshops, setFilter } from '../../../actions'
+import { getAllWorkshops } from '../../../actions/workshopsActions'
+import { setFilter } from '../../../actions/tasksActions'
 
 type PropsType = {
-    isOpen: boolean
+  isOpen: boolean
 }
 
 const Filter: React.FC<PropsType> = ({ isOpen }: PropsType) => {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-    const workshops: WorkshopsType[] =
-        useSelector(({ workshops }: StoreType) => workshops.workshops)
-    const { filterBy }: FilterStoreType = useSelector(({ filter }: StoreType) => filter)
-    const [expanded, setExpanded] = React.useState<boolean>(false)
+  const workshops: WorkshopsType[] =
+    useSelector(({ workshops }: StoreType) => workshops.workshops)
+  const { filterBy }: FilterStoreType = useSelector(({ filter }: StoreType) => filter)
+  const [expanded, setExpanded] = React.useState<boolean>(false)
 
-    useEffect(() => {
-        dispatch(getAllWorkshops())
-    }, [])
+  useEffect(() => {
+    dispatch(getAllWorkshops())
+  }, [])
 
-    const changeFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        dispatch(setFilter(event.target.value))
-    }
+  const changeFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    dispatch(setFilter(event.target.value))
+  }
 
-    const handleAccordion = (event: React.ChangeEvent<{}>): void => {
-        setExpanded(!expanded)
-    }
+  const handleAccordion = (event: React.ChangeEvent<{}>): void => {
+    setExpanded(!expanded)
+  }
 
-    return (
-        <Accordion expanded={expanded && isOpen} onChange={handleAccordion}>
-            <AccordionSummary
-                className='nav-drawer__filter'
-                expandIcon={<ExpandMoreIcon />}
-            >
-                <ListItemIcon>
-                    <SortIcon color={filterBy !== 'Все' ? 'error' : 'inherit'} />
-                </ListItemIcon>
-                <ListItemText primary={'Фильтр'} />
-            </AccordionSummary>
-            <AccordionDetails>
-                <FormControl component="fieldset">
-                    <RadioGroup
-                        value={filterBy}
-                        onChange={changeFilter}
-                    >
-                        <FormControlLabel
-                            className='nav-drawer__radio-buttom'
-                            value="Все"
-                            control={<Radio />}
-                            label="Все"
-                        />
-                        {workshops.map(item => (
-                            <FormControlLabel
-                                className='nav-drawer__radio-buttom'
-                                key={item._id}
-                                value={item.name}
-                                control={<Radio />}
-                                label={item.name}
-                            />
-                        ))}
-                    </RadioGroup>
-                </FormControl>
-            </AccordionDetails>
-        </Accordion>
-    )
+  return (
+    <Accordion expanded={expanded && isOpen} onChange={handleAccordion}>
+      <AccordionSummary
+        className='nav-drawer__filter'
+        expandIcon={<ExpandMoreIcon />}
+      >
+        <ListItemIcon>
+          <SortIcon color={filterBy !== 'Все' ? 'error' : 'inherit'} />
+        </ListItemIcon>
+        <ListItemText primary={'Фильтр'} />
+      </AccordionSummary>
+      <AccordionDetails>
+        <FormControl component="fieldset">
+          <RadioGroup
+            value={filterBy}
+            onChange={changeFilter}
+          >
+            <FormControlLabel
+              className='nav-drawer__radio-buttom'
+              value="Все"
+              control={<Radio />}
+              label="Все"
+            />
+            {workshops.map(item => (
+              <FormControlLabel
+                className='nav-drawer__radio-buttom'
+                key={item._id}
+                value={item.name}
+                control={<Radio />}
+                label={item.name}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+      </AccordionDetails>
+    </Accordion>
+  )
 }
 
 export default Filter

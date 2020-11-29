@@ -1,51 +1,53 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { isMobileOnly } from 'react-device-detect'
-import clsx from 'clsx'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllPersons } from "../../actions"
 import { PersonType } from '../../types/global'
 import { StoreType, PersonsStoreType } from '../../types/store'
 import { MiniPreloader } from '../Preloader'
 import PersonsItem from './PersonItem'
 
 import './PersonsPage.scss'
-import AddNewPerson from './AddNewPerson'
+import NewPerson from './NewPerson'
+import { getAllPersons } from '../../actions/personsActions'
 
-const PersonsPage: React.FC = () => {
+const PersonsPage = () => {
+  const [showAddForm, setOpenAddForm] = useState(false)
+
   const dispatch = useDispatch()
   const { persons, loading }: PersonsStoreType = useSelector(({ persons }: StoreType) => persons)
 
   useEffect(() => {
-    dispatch(getAllPersons())
+    !persons.length && dispatch(getAllPersons())
   }, [])
 
-  return loading || !persons.length ? <MiniPreloader /> : (
+  const openAddForm = () => {
+    setOpenAddForm(true)
+  }
+
+  const closeAddForm = () => {
+    setOpenAddForm(false)
+  }
+
+  return loading ? <MiniPreloader /> : (
     <section className={isMobileOnly ? 'mobile-page' : 'page'}>
       <div className='persons-list'>
         <h2 className="persons-list__title">Персонал КИПиСА</h2>
-        {(persons as PersonType[]).map((item: PersonType, i: number) => (
+        {(persons as PersonType[]).map((item: PersonType) => (
           <PersonsItem
             key={item._id}
-            panel={`panel${i}`}
-            {...item}
+            person={item}
           />
         ))}
       </div>
-      <AddNewPerson>Добавить нового работника</AddNewPerson>
+      <button
+        className={isMobileOnly ? 'mobile-tasks-page__add-btn' : 'desktop-tasks-page__add-btn'}
+        onClick={openAddForm}
+      >
+        Добавить нового работника
+      </button>
+      {showAddForm && <NewPerson onClose={closeAddForm} />}
     </section>
   )
 }
 
 export default PersonsPage
-
-
-// <div className="personslist">
-// {persons.map((item: PersonType, i: number) => (
-//     <PersonsItem
-//         key={item._id}
-//         updatePersons={updatePersons}
-//         deleteItem={serv.deleteItem}
-//         panel={`panel${i}`} {...item}
-//     />))}
-// )
-// </div>

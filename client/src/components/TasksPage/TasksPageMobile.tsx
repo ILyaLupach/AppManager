@@ -2,14 +2,14 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import sortBy from '../../utils/sortBy'
-import { getAllTasks } from '../../actions'
 import { FilterStoreType, StoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
 import sizeArr from '../../utils/sizeArr'
-import AddNewTasks from './components/NewTaskForm';
+import NewTasks from './components/NewTaskForm';
 import { MiniPreloader } from '../Preloader';
 import { formatTime } from '../../utils/formatTime';
 import MobileTaskItem from './components/MobileTaskItem';
+import { getAllTasks } from '../../actions/tasksActions'
 
 export default function ControlledAccordions() {
   const [isOpenAddForm, setIsOpenAddForm] = useState(false)
@@ -63,8 +63,8 @@ export default function ControlledAccordions() {
       >
         Добавить новую задачу
       </button>
-      {isOpenAddForm && <AddNewTasks onClose={closeAddForm} />}
-      {changeTask.isOpen && <AddNewTasks onClose={closeEditForm} prevTask={changeTask.task} />}
+      {isOpenAddForm && <NewTasks onClose={closeAddForm} />}
+      {changeTask.isOpen && <NewTasks onClose={closeEditForm} prevTask={changeTask.task} />}
       {loading && <MiniPreloader />}
     </div >
   )
