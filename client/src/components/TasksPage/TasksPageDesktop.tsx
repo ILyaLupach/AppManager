@@ -67,19 +67,19 @@ const TasksPageDesktop: React.FC = () => {
         <Table stickyHeader aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell style={{ minWidth: 185 }} align="left">
+              <StyledTableCell style={{ width: '18%' }} align="left">
                 Время
               </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 220 }} align="left">
+              <StyledTableCell style={{ width: '20%' }} align="left">
                 Ф.И.О. работников
               </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 220 }} align="left">
+              <StyledTableCell style={{ width: '22%' }} align="left">
                 Цех
               </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 220 }} align="left">
+              <StyledTableCell style={{ width: '20%' }} align="left">
                 Проблема
               </StyledTableCell>
-              <StyledTableCell style={{ minWidth: 200 }} align="left">
+              <StyledTableCell style={{ width: '20%' }} align="left">
                 Решение
               </StyledTableCell>
             </TableRow>

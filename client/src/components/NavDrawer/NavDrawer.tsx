@@ -72,6 +72,8 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 				return setActiveLink('board')
 			case '/persons':
 				return setActiveLink('persons')
+			case '/settings':
+				return setActiveLink('settings')
 			default:
 				return history.push('/')
 		}
@@ -139,13 +141,19 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 				<Search />
 				<Filter isOpen={open} />
 				<List>
-					<ListItem button>
-						<ListItemIcon><SettingsIcon /></ListItemIcon>
-						<ListItemText primary={'Настройки'} />
-					</ListItem>
+					<Link to='/settings'>
+						<ListItem button >
+							<ListItemIcon>
+								<SettingsIcon
+									color={checkActiveLink('settings')}
+								/>
+							</ListItemIcon>
+							<ListItemText primary={'Настройки'} />
+						</ListItem>
+					</Link>
 				</List>
 			</Drawer>
-			{isMobileOnly && <FixedBtn isOpenHandler={isOpenHandler} isOpen={open}/>}
+			{isMobileOnly && <FixedBtn isOpenHandler={isOpenHandler} isOpen={open} />}
 		</nav>
 	)
 }

@@ -10,12 +10,13 @@ import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css";
 import { StoreType } from '../../../types/store';
-import { FormControl, Input, InputLabel, ListItemText, Select, Checkbox, MenuItem, InputBase } from '@material-ui/core'
+import { FormControl, Input, InputLabel, ListItemText, Select, Checkbox, MenuItem } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab';
-import { CompletedMessage, ErrorMessage, ValidateError } from '../../shared/Message';
+import { CompletedMessage, ValidateError } from '../../shared/Message';
 import { getAllPersons } from '../../../actions/personsActions';
 import api from '../../../api';
 import { getAllTasks } from '../../../actions/tasksActions';
+import { getAllWorkshops } from '../../../actions/workshopsActions';
 
 type Props = {
   onClose: () => void
@@ -23,10 +24,6 @@ type Props = {
 }
 
 const useStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
   root: {
     overflow: 'hidden',
     paddingTop: 5,
@@ -35,28 +32,19 @@ const useStyles = makeStyles(theme => ({
       width: "95%"
     },
   },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '30%',
-  },
-}));
-
-const defaultDate = new Date()
+}))
 
 const AddNewTasks = ({ onClose, prevTask }: Props) => {
+  const defaultDate = new Date()
   const classes = useStyles()
   const dispatch = useDispatch()
   const NameList: PersonType[] =
     useSelector(({ persons }: StoreType) => persons.persons)
   const workshopsList: WorkshopsType[] =
     useSelector(({ workshops }: StoreType) => workshops.workshops)
-
   const [loading, setLoading] = useState(false)
   const [completed, setCompleted] = useState(false)
   const [validateError, setValidateError] = useState(false)
-  const [error, setError] = useState(false)
-
   const [task, setTask] = useState<TasksType>({
     date: prevTask?.date ? new Date(prevTask.date) : defaultDate,
     name: prevTask?.name || [],
@@ -97,8 +85,18 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
     setLoading(true)
     const { date, name, failure, fix, start, finish, position, object } = task
     if (!prevTask && date && name && failure && fix && start && finish && position && object) {
-      const { task: newTask, error } =
-        await api.createNewTasks({ ...task, position: 'qwe', object: 'qwe-qwe' })
+      if (workshopsList.filter(item => item.name === position)[0]?.object?.filter(item => item === object)?.length === 0) {
+        const obj = workshopsList.filter(item => item.name === position)[0].object
+        const newObj = [...obj, object];
+        await api.updateData(
+          'workshops',
+          workshopsList.filter(item => item.name === position)[0]._id, { object: newObj }
+        )
+        dispatch(getAllWorkshops())
+      }
+
+      const { task: newTask } =
+        await api.createNewTasks(task)
       if (newTask) {
         dispatch(getAllTasks())
         setLoading(false)
@@ -119,20 +117,24 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
 
   const onEditTask = async () => {
     const { date, name, failure, fix, start, finish, position, object } = task
-    if (!prevTask) return
-    // setLoading(true)
+    setLoading(true)
     if (date || name || failure || fix || start || finish || position || object) {
-      const body = await api.updateData('tasks', prevTask?._id, task)
-      if (true) {
+      const { body, error } = await api.updateData('tasks', prevTask?._id, task)
+      if (body) {
         dispatch(getAllTasks())
+        setCompleted(true)
+        setTimeout(() => {
+          setCompleted(false)
+          onClose()
+        }, 2000)
       }
-      if (false) onClose()
+      if (!body || error) onClose()
     } else {
-      // setValidateError(true)
-      // setTimeout(() => {
-      //   setValidateError(false)
-      //   setLoading(false)
-      // }, 2000)
+      setValidateError(true)
+      setTimeout(() => {
+        setValidateError(false)
+        setLoading(false)
+      }, 2000)
     }
   }
 
@@ -151,31 +153,24 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
   const handleChangeText = (event: any) => {
     switch (event.target.id) {
       case "failure":
-        setTask({
-          ...task,
-          failure: event.target.value
-        });
+        setTask({ ...task, failure: event.target.value })
         break;
       case "fix":
-        setTask({
-          ...task,
-          fix: event.target.value
-        })
+        setTask({ ...task, fix: event.target.value })
         break;
-      default: break;
     }
   }
 
   return (
     <>
       <Dialog
-        className={(!validateError && !error && !completed) ? 'add-task-form' : undefined}
+        className={(!validateError && !completed) ? 'add-task-form' : undefined}
         disableBackdropClick
         disableEscapeKeyDown
         open={true}
         onClose={onClose}
       >
-        {(!validateError && !error && !completed) && (
+        {(!validateError && !completed) && (
           <DialogContent>
             <form className={classes.root} noValidate autoComplete="off">
               <div
@@ -189,7 +184,6 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                   className='add-task-form__date-picker add-task-form__date-picker_first'
                 />
               </div>
-
               <div className="add-task-form__date-picker-container">
                 <div className='add-task-form__date-picker-wrapper'>
                   <span className='add-task-form__date-picker-text'>Приступил</span>
@@ -220,7 +214,7 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                   />
                 </div>
               </div>
-              <FormControl className={classes.formControl}>
+              <FormControl>
                 <InputLabel id="demo-mutiple-checkbox-label">
                   Исполнитель(ли)
               </InputLabel>
@@ -244,7 +238,6 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                   ))}
                 </Select>
               </FormControl>
-
               <div className="add-task-form__position-wrapper">
                 <FormControl className='add-task-form__position'>
                   <InputLabel id="demo-customized-select-label">Цех</InputLabel>
@@ -264,9 +257,9 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                   className='add-task-form__position add-task-form__position_second'
                 >
                   <Autocomplete
-                    id="combo-box-demo"
+                    id="free-solo-demo"
+                    freeSolo
                     className='add-task-form__position-autocomplete'
-                    debug
                     onChange={(event: any, newValue: string | null) => {
                       handleObject(newValue)
                     }}
@@ -274,19 +267,15 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                       handleObject(newInputValue)
                     }}
                     options={
-                      !task.position ? [] :
-                        workshopsList.filter((item) => item.name === task.position)[0]?.object.map(str => str[0].toUpperCase() + str.slice(1)).sort()}
-                    getOptionLabel={(option: any) => option}
-                    style={{
-                      width: "45vw"
-                    }}
+                      (!task.position || !workshopsList.length) ? [] :
+                        workshopsList.filter((item) => item.name === task.position)[0]?.object.map(str => str[0].toUpperCase() + str.slice(1)).sort()
+                    }
                     renderInput={(params: any) => (
-                      <TextField {...params} id="standard-basic" fullWidth />
+                      <TextField {...params} label='Объект' id="standard-basic" fullWidth />
                     )}
                   />
                 </FormControl>
               </div>
-
               <TextField
                 value={task.failure}
                 onChange={handleChangeText}
@@ -305,7 +294,6 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
           </DialogContent>
         )}
         {validateError && <ValidateError />}
-        {error && <ErrorMessage />}
         {completed && <CompletedMessage />}
         <DialogActions>
           <Button onClick={onClose} color="primary">

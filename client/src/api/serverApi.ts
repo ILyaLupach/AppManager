@@ -70,17 +70,21 @@ export default class ServerApi {
     }
   }
 
-  // addNewWorkshops = async (data: WorkshopsType) => {
-  //   const workshop = await fetch("/workshops", {
-  //     method: "POST",
-  //     headers: {
-  //       "Accept": "application/json",
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(data)
-  //   })
-  //   return workshop
-  // }
+  addNewWorkshops = async (data: WorkshopsType) => {
+    try {
+      const workshop = await fetch("/workshops", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(res => res.json())
+      return { workshop }
+    } catch (error) {
+      return { error }
+    }
+  }
 
   deleteItem = async (id: any, url: string) => {
     return await fetch(`/${url}/${id}`, {
