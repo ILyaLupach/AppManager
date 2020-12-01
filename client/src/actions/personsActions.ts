@@ -1,6 +1,6 @@
 import api from '../api'
-import { ActionType, ADD_NEW_PERSON, EDIT_PERSON, GET_ALL_PERSONS, LOADING_PERSONS } from "./actionTypes"
-
+import { ActionType, ADD_NEW_PERSON, UPDATE_PERSON, GET_ALL_PERSONS, LOADING_PERSONS, REMOVE_PERSON } from "./actionTypes"
+import { StoreType } from '../types/store'
 import { PersonType } from "../types/global"
 import { Dispatch } from 'react'
 
@@ -29,11 +29,17 @@ export const createNewPerson = (newPerson: PersonType) =>
     })
   }
 
-export const updatePerson = () =>
-  async (dispatch: Dispatch<ActionType>) => {
-    const persons: PersonType[] = await api.getAllPersons()
+export const updatePerson =
+  (person: PersonType) => (dispatch: Dispatch<ActionType>, getState: () => StoreType) => {
+    const { persons: personsStore } = getState()
+    const newPersonsList = [...personsStore.persons.filter(item => item._id !== person._id), person]
     dispatch({
-      type: EDIT_PERSON,
-      payload: persons,
+      type: UPDATE_PERSON,
+      payload: newPersonsList,
     })
   }
+
+  export const removePerson = (id: number) => ({
+    type: REMOVE_PERSON,
+    payload: id
+  })

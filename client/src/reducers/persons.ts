@@ -1,5 +1,5 @@
 import { PersonsStoreType } from '../types/store'
-import { ActionType, ADD_NEW_PERSON, EDIT_PERSON, GET_ALL_PERSONS, LOADING_PERSONS } from '../actions/actionTypes'
+import { ActionType, ADD_NEW_PERSON, UPDATE_PERSON, GET_ALL_PERSONS, LOADING_PERSONS, REMOVE_PERSON } from '../actions/actionTypes'
 
 const initialState = {
   persons: [],
@@ -11,7 +11,7 @@ export default (state: PersonsStoreType = initialState, action: ActionType) => {
     case GET_ALL_PERSONS:
       return {
         ...state,
-        persons: action.payload
+        persons: action.payload,
       }
     case LOADING_PERSONS:
       return {
@@ -21,12 +21,17 @@ export default (state: PersonsStoreType = initialState, action: ActionType) => {
     case ADD_NEW_PERSON:
       return {
         ...state,
-        persons: [...state.persons, action.payload]
+        persons: [...state.persons, action.payload],
       }
-    case EDIT_PERSON:
+    case UPDATE_PERSON:
       return {
         ...state,
-        persons: action.payload
+        persons: action.payload,
+      }
+    case REMOVE_PERSON:
+      return {
+        ...state,
+        persons: state.persons.filter(item => item._id !== action.payload),
       }
     default:
       return state

@@ -32,6 +32,9 @@
   }
   &__item {
     position: relative;
+    * {
+        border-right: none !important;
+    }
     &_checked {
       background-color: rgb(255, 232, 230) !important;
       .desktop-tasks-page__item-actions-btn {
@@ -59,7 +62,9 @@
   &__item-actions-btn {
     background-color: #d4f7ff !important;
     font-size: 14px;
-    text-transform: none !important;
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
 

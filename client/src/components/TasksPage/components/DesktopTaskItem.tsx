@@ -7,11 +7,16 @@ import TableRow from '@material-ui/core/TableRow'
 import { TasksType } from '../../../types/global'
 import { formatTime } from '../../../utils/formatTime'
 import { Button, ButtonGroup } from '@material-ui/core'
+import api from '../../../api'
+import { removeTask } from '../../../actions/tasksActions'
+import { useDispatch } from 'react-redux'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
+import SettingsIcon from '@material-ui/icons/Settings'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 
 type Props = {
   task: TasksType
   openEditForm: (task: TasksType) => void
-  deleteTasks: (task: TasksType) => void
 }
 
 const StyledTableCell = withStyles((theme: Theme) => ({
@@ -40,27 +45,34 @@ const StyledTableRow = withStyles((theme: Theme) => ({
   },
 }))(TableRow)
 
-const DesktopTaskItem = ({ task, openEditForm, deleteTasks }: Props) => {
+const DesktopTaskItem = ({ task, openEditForm }: Props) => {
   const [showChangePanel, setShowChangePanel] = useState(false)
   const [checked, setChecked] = useState(task.mark || false)
   const thisRef = useRef<any>(null)
-
-  const toggleChecked = () => {
-    // serv.updateData('tasks', task._id, {mark: !task.mark})
-    setChecked(prev => !prev);
-  }
+  const dispatch = useDispatch()
 
   useEffect(() => {
     return () => {
       document.removeEventListener('click', handleOuterClick)
+      document.removeEventListener('mouseover', handleOuterClick)
     }
   }, [])
 
+  const toggleChecked = async () => {
+    const { body } = await api.updateData('tasks', task._id, { mark: !task.mark })
+    body && setChecked(body.mark)
+  }
+
+  const removeItem = async () => {
+    if(!task._id) return
+    const success = await api.deleteItem(task._id, 'tasks')
+    success && dispatch(removeTask(task._id))
+  }
+
   const handleOuterClick = (event: { target: any }) => {
-    if (!thisRef.current.contains(event.target)) {
+    if (!thisRef?.current?.contains(event.target)) {
       closeChangePanel()
     }
-    console.log(event)
   }
 
   const openChangePanel = () => {
@@ -115,19 +127,19 @@ const DesktopTaskItem = ({ task, openEditForm, deleteTasks }: Props) => {
             className='desktop-tasks-page__item-actions-btn'
             onClick={toggleChecked}
           >
-            Отметить
+            <ErrorOutlineIcon />
           </Button>
           <Button
             className='desktop-tasks-page__item-actions-btn'
             onClick={() => openEditForm(task)}
           >
-            Редактировать
+            <SettingsIcon />
           </Button>
           <Button
             className='desktop-tasks-page__item-actions-btn'
-            onClick={() => deleteTasks(task)}
+            onClick={removeItem}
           >
-            Удалить
+            <DeleteForeverIcon />
           </Button>
         </ButtonGroup>
       </StyledTableCell>

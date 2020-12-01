@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { createNewPerson, updatePerson } from '../../actions/personsActions'
 import { PersonType } from '../../types/global'
 import api from '../../api'
-import { ComplitedPerson, AlarmPerson, ValidateError } from '../shared/Message'
+import { ComplitedPerson, AlarmPerson } from '../shared/Message'
 
 type Props = {
   onClose: () => void
@@ -104,7 +104,7 @@ const NewPerson = ({ person, onClose }: Props) => {
     ) {
       const { error, body } = await api.updateData('persons', person?._id, newPerson)
       if (body) {
-        dispatch(updatePerson())
+        dispatch(updatePerson(body))
         setCompleted(true)
         setTimeout(() => {
           setCompleted(false)

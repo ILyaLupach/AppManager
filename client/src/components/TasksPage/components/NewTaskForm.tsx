@@ -15,8 +15,8 @@ import { Autocomplete } from '@material-ui/lab';
 import { CompletedMessage, ValidateError } from '../../shared/Message';
 import { getAllPersons } from '../../../actions/personsActions';
 import api from '../../../api';
-import { getAllTasks } from '../../../actions/tasksActions';
-import { getAllWorkshops } from '../../../actions/workshopsActions';
+import { updateTask } from '../../../actions/tasksActions';
+import { getAllWorkshops, updateWorkshop } from '../../../actions/workshopsActions';
 
 type Props = {
   onClose: () => void
@@ -54,10 +54,12 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
     finish: prevTask?.start ? new Date(prevTask?.finish) : defaultDate,
     position: prevTask?.position || '',
     object: prevTask?.object || '',
+    _id: prevTask?._id || undefined
   })
 
   useEffect(() => {
     !NameList.length && dispatch(getAllPersons())
+    !workshopsList.length && dispatch(getAllWorkshops())
   }, [])
 
   const handlePersons = (event: React.ChangeEvent<{ value: string[] | unknown }>) => {
@@ -88,17 +90,15 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
       if (workshopsList.filter(item => item.name === position)[0]?.object?.filter(item => item === object)?.length === 0) {
         const obj = workshopsList.filter(item => item.name === position)[0].object
         const newObj = [...obj, object];
-        await api.updateData(
+        const { body, error } = await api.updateData(
           'workshops',
           workshopsList.filter(item => item.name === position)[0]._id, { object: newObj }
         )
-        dispatch(getAllWorkshops())
+        body && dispatch(updateWorkshop(body))
       }
-
-      const { task: newTask } =
-        await api.createNewTasks(task)
+      const { task: newTask } = await api.createNewTasks(task)
       if (newTask) {
-        dispatch(getAllTasks())
+        dispatch(updateTask(newTask))
         setLoading(false)
         setCompleted(true)
         setTimeout(() => {
@@ -121,7 +121,7 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
     if (date || name || failure || fix || start || finish || position || object) {
       const { body, error } = await api.updateData('tasks', prevTask?._id, task)
       if (body) {
-        dispatch(getAllTasks())
+        dispatch(updateTask(task))
         setCompleted(true)
         setTimeout(() => {
           setCompleted(false)
@@ -259,6 +259,7 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                   <Autocomplete
                     id="free-solo-demo"
                     freeSolo
+                    value={task.object}
                     className='add-task-form__position-autocomplete'
                     onChange={(event: any, newValue: string | null) => {
                       handleObject(newValue)

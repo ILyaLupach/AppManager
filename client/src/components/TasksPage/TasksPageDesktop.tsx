@@ -54,10 +54,6 @@ const TasksPageDesktop: React.FC = () => {
   const openEditForm = (task: TasksType) => setChangeTask({ isOpen: true, task })
   const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
 
-  const deleteTasks = (task: TasksType) => {
-    console.log('delete: ', task.object)
-  }
-
   const validTasks: TasksType[] | null =
     sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['desc']), filterBy, searchQuery)
 
@@ -90,7 +86,6 @@ const TasksPageDesktop: React.FC = () => {
                 key={task._id}
                 task={task}
                 openEditForm={openEditForm}
-                deleteTasks={deleteTasks}
               />
             ))}
           </TableBody>

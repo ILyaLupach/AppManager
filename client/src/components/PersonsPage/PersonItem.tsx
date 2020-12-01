@@ -8,7 +8,7 @@ import { PersonType } from '../../types/global';
 import NewPerson from './NewPerson';
 import api from '../../api';
 import { useDispatch } from 'react-redux';
-import { updatePerson } from '../../actions/personsActions';
+import { removePerson } from '../../actions/personsActions';
 
 type Props = {
   person: PersonType
@@ -26,9 +26,10 @@ export default function PersonsItem({ person }: Props) {
     setShowEditForm(false)
   }
 
-  const deletePerson = async () => {
+  const onRemovePerson = async () => {
+    if(!person._id) return
     const success = await api.deleteItem(person._id, 'persons')
-    if (success) dispatch(updatePerson())
+    if (success) dispatch(removePerson(person._id))
   }
 
   return (
@@ -53,7 +54,7 @@ export default function PersonsItem({ person }: Props) {
           <Button onClick={openEditForm} color="primary">
             <h5>редактировать</h5>
           </Button>
-          <Button onClick={deletePerson} color="primary">
+          <Button onClick={onRemovePerson} color="primary">
             <h5>удалить</h5>
           </Button>
         </DialogActions>

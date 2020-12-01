@@ -5,15 +5,20 @@ export const GET_ALL_TASKS: string = 'GET_ALL_TASKS'
 export const LOADING_TASKS: string = 'LOADING_TASKS'
 export const SET_FILTER: string = 'SET_FILTER'
 export const SET_QUERY: string = 'SET_QUERY'
+export const UPDATE_TASK: string = 'UPDATE_TASK'
+export const REMOVE_TASK: string = 'REMOVE_TASK'
 
 // persons types
 export const GET_ALL_PERSONS: string = 'GET_ALL_PERSONS'
 export const LOADING_PERSONS: string = 'LOADING_PERSONS'
 export const ADD_NEW_PERSON: string = 'ADD_NEW_PERSON'
-export const EDIT_PERSON: string = 'EDIT_PERSON'
+export const UPDATE_PERSON: string = 'UPDATE_PERSON'
+export const REMOVE_PERSON: string = 'REMOVE_PERSON'
 
 // workshops types
 export const GET_ALL_WORKSHOPS: string = 'GET_ALL_WORKSHOPS'
+export const UPDATE_WORKSHOP: string = 'UPDATE_WORKSHOP'
+export const REMOVE_WORKSHOP: string = 'REMOVE_WORKSHOP'
 
 interface getAllTasks {
   type: typeof GET_ALL_TASKS
@@ -23,6 +28,16 @@ interface getAllTasks {
 interface loadingTasks {
   type: typeof LOADING_TASKS
   payload: boolean
+}
+
+interface updateTask {
+  type: typeof UPDATE_TASK
+  payload: TasksType
+}
+
+interface removeTask {
+  type: typeof REMOVE_TASK
+  payload: number | undefined
 }
 
 interface setFilter {
@@ -51,13 +66,28 @@ interface addNewPerson {
 }
 
 interface editPerson {
-  type: typeof EDIT_PERSON
-  payload: PersonType
+  type: typeof UPDATE_PERSON
+  payload: PersonType[]
+}
+
+interface removePerson {
+  type: typeof REMOVE_PERSON
+  payload: number
 }
 
 interface getAllWorkshops {
   type: typeof GET_ALL_WORKSHOPS
   payload: WorkshopsType[]
+}
+
+interface updateWorkshop {
+  type: typeof UPDATE_WORKSHOP
+  payload: WorkshopsType
+}
+
+interface removeWorkshop {
+  type: typeof REMOVE_WORKSHOP
+  payload: number
 }
 
 export type ActionType =
@@ -69,4 +99,9 @@ export type ActionType =
   LoadingPerson |
   addNewPerson |
   getAllWorkshops |
-  editPerson
+  editPerson |
+  updateTask |
+  removeTask |
+  removePerson |
+  updateWorkshop |
+  removeWorkshop

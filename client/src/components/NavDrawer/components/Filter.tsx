@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -12,7 +12,7 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import { WorkshopsType } from '../../../types/global'
-import { StoreType, FilterStoreType } from '../../../types/store'
+import { FilterStoreType, StoreType } from '../../../types/store'
 import { getAllWorkshops } from '../../../actions/workshopsActions'
 import { setFilter } from '../../../actions/tasksActions'
 
@@ -20,13 +20,13 @@ type PropsType = {
   isOpen: boolean
 }
 
-const Filter: React.FC<PropsType> = ({ isOpen }: PropsType) => {
+const Filter = ({ isOpen }: PropsType) => {
   const dispatch = useDispatch()
 
   const workshops: WorkshopsType[] =
     useSelector(({ workshops }: StoreType) => workshops.workshops)
   const { filterBy }: FilterStoreType = useSelector(({ filter }: StoreType) => filter)
-  const [expanded, setExpanded] = React.useState<boolean>(false)
+  const [expanded, setExpanded] = useState<boolean>(false)
 
   useEffect(() => {
     dispatch(getAllWorkshops())

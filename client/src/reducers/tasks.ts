@@ -1,9 +1,16 @@
-import { LOADING_TASKS, GET_ALL_TASKS, ActionType } from '../actions/actionTypes'
+import {
+  LOADING_TASKS,
+  GET_ALL_TASKS,
+  ActionType,
+  UPDATE_TASK,
+  REMOVE_TASK
+} from '../actions/actionTypes'
+import { TasksType } from '../types/global'
 import { TasksStoreType } from '../types/store'
 
 const initialState: TasksStoreType = {
   loading: true,
-  tasks: []
+  tasks: [],
 }
 
 export default (state: TasksStoreType = initialState, action: ActionType) => {
@@ -17,6 +24,17 @@ export default (state: TasksStoreType = initialState, action: ActionType) => {
       return {
         ...state,
         loading: action.payload,
+      }
+    case UPDATE_TASK: {
+      return {
+        ...state,
+        tasks: action.payload
+      }
+    }
+    case REMOVE_TASK:
+      return {
+        ...state,
+        tasks: state.tasks.filter(item => item._id !== action.payload)
       }
     default:
       return state

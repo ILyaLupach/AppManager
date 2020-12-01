@@ -34,10 +34,6 @@ export default function ControlledAccordions() {
   const openEditForm = (task: TasksType) => setChangeTask({ isOpen: true, task })
   const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
 
-  const deleteTasks = (task: TasksType) => {
-    console.log('delete: ', task.object)
-  }
-
   const validTasks: TasksType[] | null =
     sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['asc']), filterBy, searchQuery)
 
@@ -52,7 +48,6 @@ export default function ControlledAccordions() {
           )}
           <MobileTaskItem
             task={task}
-            deleteTasks={deleteTasks}
             openEditForm={openEditForm}
           />
         </Fragment>

@@ -1,21 +1,30 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, DialogActions, FormControlLabel, Switch } from '@material-ui/core'
 import clsx from 'clsx'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { removeTask } from '../../../actions/tasksActions'
+import api from '../../../api'
 import { TasksType } from '../../../types/global'
 import { getTimeWork } from '../../../utils/formatTime'
 
 type Props = {
   task: TasksType
   openEditForm: (task: TasksType) => void
-  deleteTasks: (task: TasksType) => void
 }
 
-const MobileTaskItem = ({ task, openEditForm, deleteTasks }: Props) => {
+const MobileTaskItem = ({ task, openEditForm }: Props) => {
   const [checked, setChecked] = useState(task.mark || false)
+  const dispatch = useDispatch()
 
-  const toggleChecked = () => {
-    // serv.updateData('tasks', task._id, {mark: !task.mark})
-    setChecked(prev => !prev);
+  const toggleChecked = async () => {
+    const { body } = await api.updateData('tasks', task._id, { mark: !task.mark })
+    body && setChecked(body.mark)
+  }
+
+  const removeItem = async () => {
+    if(!task._id) return
+    const success = await api.deleteItem(task._id, 'tasks')
+    success && dispatch(removeTask(task._id))
   }
 
   return (
@@ -51,7 +60,7 @@ const MobileTaskItem = ({ task, openEditForm, deleteTasks }: Props) => {
         <Button onClick={() => openEditForm(task)} color="primary">
           <h5>редактировать</h5>
         </Button>
-        <Button onClick={() => deleteTasks(task)} color="primary">
+        <Button onClick={removeItem} color="primary">
           <h5>удалить</h5>
         </Button>
       </DialogActions>
