@@ -1,10 +1,11 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, DialogActions, FormControlLabel, Switch } from '@material-ui/core'
 import clsx from 'clsx'
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { removeTask } from '../../../actions/tasksActions'
 import api from '../../../api'
 import { TasksType } from '../../../types/global'
+import { StoreType } from '../../../types/store'
 import { getTimeWork } from '../../../utils/formatTime'
 
 type Props = {
@@ -13,11 +14,12 @@ type Props = {
 }
 
 const MobileTaskItem = ({ task, openEditForm }: Props) => {
+  const { acces } = useSelector(({ user }: StoreType) => user)
   const [checked, setChecked] = useState(task.mark || false)
   const dispatch = useDispatch()
 
   const toggleChecked = async () => {
-    const { body } = await api.updateData('tasks', task._id, { mark: !task.mark })
+    const { body } = await api.updateData('tasks', task._id, { mark: !checked })
     body && setChecked(body.mark)
   }
 
@@ -49,7 +51,8 @@ const MobileTaskItem = ({ task, openEditForm }: Props) => {
           <span className='mobile-tasks-page__text'>{task.fix}</span>
         </div>
       </AccordionDetails>
-      <DialogActions>
+      {acces !== 'read-only' && (
+        <DialogActions>
         <FormControlLabel
           control={<Switch checked={checked} onChange={toggleChecked} />}
           label={
@@ -63,7 +66,8 @@ const MobileTaskItem = ({ task, openEditForm }: Props) => {
         <Button onClick={removeItem} color="primary">
           <h5>удалить</h5>
         </Button>
-      </DialogActions>
+        </DialogActions>
+      )}
     </Accordion>
   )
 }

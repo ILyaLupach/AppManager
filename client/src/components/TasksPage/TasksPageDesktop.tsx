@@ -42,11 +42,12 @@ const TasksPageDesktop: React.FC = () => {
   const { tasks, loading }: TasksStoreType = useSelector(({ tasks }: StoreType) => tasks)
   const { filterBy, searchQuery }: FilterStoreType =
     useSelector(({ filter }: StoreType) => filter)
+  const { acces } = useSelector(({ user }: StoreType) => user)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    !tasks.length && dispatch(getAllTasks())
-  }, [tasks.length])
+    tasks && !tasks.length && dispatch(getAllTasks())
+  }, [tasks])
 
   const openAddForm = () => setIsOpenAddForm(true)
   const closeAddForm = () => setIsOpenAddForm(false)
@@ -91,12 +92,14 @@ const TasksPageDesktop: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <button
-        className='desktop-tasks-page__add-btn'
-        onClick={openAddForm}
-      >
-        Добавить новую задачу
-      </button>
+      {acces !== 'read-only' && (
+        <button
+          className='desktop-tasks-page__add-btn'
+          onClick={openAddForm}
+        >
+          Добавить новую задачу
+        </button>
+      )}
       {isOpenAddForm && <AddNewTasks onClose={closeAddForm} />}
       {changeTask.isOpen && <AddNewTasks onClose={closeEditForm} prevTask={changeTask.task} />}
       {loading && <MiniPreloader />}

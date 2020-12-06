@@ -1,0 +1,5 @@
+{
+  "DEV_PORT": 4000,
+  "dbUri": "mongodb+srv://Admin:admin@cluster0-ir1ax.mongodb.net/KIP",
+  "secretKey": "Belarus"
+}

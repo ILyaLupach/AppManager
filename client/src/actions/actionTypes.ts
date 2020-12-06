@@ -1,4 +1,4 @@
-import { PersonType, TasksType, WorkshopsType } from '../types/global'
+import { PersonType, TasksType, UserType, WorkshopsType } from '../types/global'
 
 // tasks types
 export const GET_ALL_TASKS: string = 'GET_ALL_TASKS'
@@ -19,6 +19,37 @@ export const REMOVE_PERSON: string = 'REMOVE_PERSON'
 export const GET_ALL_WORKSHOPS: string = 'GET_ALL_WORKSHOPS'
 export const UPDATE_WORKSHOP: string = 'UPDATE_WORKSHOP'
 export const REMOVE_WORKSHOP: string = 'REMOVE_WORKSHOP'
+
+// auth type
+export const SET_USER = 'SET_USER'
+export const LOGOUT = 'LOGOUT'
+export const LOADING_AUTH = 'LOADING_AUTH'
+export const AUTH_ERROR = 'AUTH_ERROR'
+
+interface setUser {
+  type: typeof SET_USER
+  payload: UserType
+}
+
+interface logOut {
+  type: typeof LOGOUT
+  payload: string
+}
+
+interface loadingAuth {
+  type: typeof LOADING_AUTH
+  payload: boolean
+}
+
+interface setErrorAuth {
+  type: typeof AUTH_ERROR
+  payload: string
+}
+
+interface logoutAuth {
+  type: typeof LOGOUT
+  payload: null
+}
 
 interface getAllTasks {
   type: typeof GET_ALL_TASKS
@@ -104,4 +135,9 @@ export type ActionType =
   removeTask |
   removePerson |
   updateWorkshop |
-  removeWorkshop
+  removeWorkshop |
+  setUser |
+  logOut |
+  loadingAuth |
+  setErrorAuth |
+  logoutAuth

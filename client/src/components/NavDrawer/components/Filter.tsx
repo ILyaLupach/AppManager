@@ -63,7 +63,7 @@ const Filter = ({ isOpen }: PropsType) => {
               control={<Radio />}
               label="Все"
             />
-            {workshops.map(item => (
+            {workshops?.map(item => (
               <FormControlLabel
                 className='nav-drawer__radio-buttom'
                 key={item._id}

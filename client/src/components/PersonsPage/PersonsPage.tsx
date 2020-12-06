@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { isMobileOnly } from 'react-device-detect'
+import clsx from 'clsx'
 import { useSelector, useDispatch } from 'react-redux'
 import { PersonType } from '../../types/global'
-import { StoreType, PersonsStoreType } from '../../types/store'
+import { StoreType } from '../../types/store'
 import { MiniPreloader } from '../Preloader'
 import PersonsItem from './PersonItem'
 
@@ -12,9 +13,9 @@ import { getAllPersons } from '../../actions/personsActions'
 
 const PersonsPage = () => {
   const [showAddForm, setOpenAddForm] = useState(false)
-
   const dispatch = useDispatch()
-  const { persons, loading }: PersonsStoreType = useSelector(({ persons }: StoreType) => persons)
+  const { acces } = useSelector(({ user }: StoreType) => user)
+  const { persons, loading } = useSelector(({ persons }: StoreType) => persons)
 
   useEffect(() => {
     !persons.length && dispatch(getAllPersons())
@@ -39,12 +40,14 @@ const PersonsPage = () => {
           />
         ))}
       </div>
-      <button
-        className={isMobileOnly ? 'mobile-tasks-page__add-btn' : 'desktop-tasks-page__add-btn'}
-        onClick={openAddForm}
-      >
-        Добавить нового работника
-      </button>
+      {acces !== 'read-only' && (
+        <button
+          className={isMobileOnly ? 'mobile-tasks-page__add-btn' : 'desktop-tasks-page__add-btn'}
+          onClick={openAddForm}
+        >
+          Добавить нового работника
+        </button>
+      )}
       {showAddForm && <NewPerson onClose={closeAddForm} />}
     </section>
   )

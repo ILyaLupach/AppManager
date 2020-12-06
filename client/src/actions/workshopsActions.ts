@@ -18,7 +18,6 @@ export const updateWorkshop =
     const { workshops: workshopsList } = getState()
     const newWorkshopsList =
       [...workshopsList.workshops.filter(item => item._id !== workshop._id), workshop]
-    console.log(newWorkshopsList)
     dispatch({
       type: UPDATE_WORKSHOP,
       payload: newWorkshopsList,

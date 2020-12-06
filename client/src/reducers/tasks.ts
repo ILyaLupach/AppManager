@@ -5,7 +5,6 @@ import {
   UPDATE_TASK,
   REMOVE_TASK
 } from '../actions/actionTypes'
-import { TasksType } from '../types/global'
 import { TasksStoreType } from '../types/store'
 
 const initialState: TasksStoreType = {

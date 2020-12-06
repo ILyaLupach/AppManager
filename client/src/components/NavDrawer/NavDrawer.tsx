@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, withRouter, RouteComponentProps, useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -14,13 +14,13 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Filter from './components/Filter'
 import Search from './components/Search'
-
-import './NavDrawer.scss'
 import { isMobileOnly } from 'react-device-detect'
 import FixedBtn from './components/FixedBtn'
 import { getAllWorkshops } from '../../actions/workshopsActions'
+import { StoreType } from '../../types/store'
 
-const drawerWidth = 260
+import './NavDrawer.scss'
+import Acces from './components/Acces'
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -28,13 +28,14 @@ const useStyles = makeStyles((theme: Theme) =>
 			display: 'flex',
 		},
 		drawer: {
-			width: drawerWidth,
+			width: 260,
 			flexShrink: 0,
 			whiteSpace: 'nowrap',
 		},
 		drawerOpen: {
-			width: drawerWidth,
+			width: 260,
 			left: 'auto',
+			overflowX: 'hidden',
 			transition: theme.transitions.create('all', {
 				easing: theme.transitions.easing.sharp,
 				duration: theme.transitions.duration.enteringScreen,
@@ -49,12 +50,16 @@ const useStyles = makeStyles((theme: Theme) =>
 			overflowX: 'hidden',
 			left: isMobileOnly ? -60 : 'auto',
 		},
+		username: {
+			marginBottom: 30,
+		}
 	}),
 )
 
-const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) => {
+const NavDrawer = ({ location }: RouteComponentProps) => {
 	const history = useHistory()
 	const classes = useStyles()
+	const { isGuest } = useSelector(({ user }: StoreType) => user)
 	const dispatch = useDispatch()
 
 	const [open, setOpen] = useState(false)
@@ -141,16 +146,19 @@ const NavDrawer: React.FC<RouteComponentProps> = ({ location }: RouteComponentPr
 				<Search />
 				<Filter isOpen={open} />
 				<List>
-					<Link to='/settings'>
-						<ListItem button >
-							<ListItemIcon>
-								<SettingsIcon
-									color={checkActiveLink('settings')}
-								/>
-							</ListItemIcon>
-							<ListItemText primary={'Настройки'} />
-						</ListItem>
-					</Link>
+					{!isGuest && (
+						<Link to='/settings'>
+							<ListItem button>
+								<ListItemIcon>
+									<SettingsIcon
+										color={checkActiveLink('settings')}
+									/>
+								</ListItemIcon>
+								<ListItemText primary={'Настройки'} />
+							</ListItem>
+						</Link>
+					)}
+					<Acces />
 				</List>
 			</Drawer>
 			{isMobileOnly && <FixedBtn isOpenHandler={isOpenHandler} isOpen={open} />}

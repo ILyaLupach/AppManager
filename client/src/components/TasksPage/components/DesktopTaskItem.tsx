@@ -9,10 +9,11 @@ import { formatTime } from '../../../utils/formatTime'
 import { Button, ButtonGroup } from '@material-ui/core'
 import api from '../../../api'
 import { removeTask } from '../../../actions/tasksActions'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import { StoreType } from '../../../types/store'
 
 type Props = {
   task: TasksType
@@ -48,6 +49,7 @@ const StyledTableRow = withStyles((theme: Theme) => ({
 const DesktopTaskItem = ({ task, openEditForm }: Props) => {
   const [showChangePanel, setShowChangePanel] = useState(false)
   const [checked, setChecked] = useState(task.mark || false)
+  const { acces } = useSelector(({ user }: StoreType) => user)
   const thisRef = useRef<any>(null)
   const dispatch = useDispatch()
 
@@ -59,7 +61,7 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
   }, [])
 
   const toggleChecked = async () => {
-    const { body } = await api.updateData('tasks', task._id, { mark: !task.mark })
+    const { body } = await api.updateData('tasks', task._id, { mark: !checked })
     body && setChecked(body.mark)
   }
 
@@ -76,6 +78,7 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
   }
 
   const openChangePanel = () => {
+    if(acces === 'read-only') return
     setShowChangePanel(true)
     document.addEventListener('click', handleOuterClick)
     document.addEventListener('mouseover', handleOuterClick)

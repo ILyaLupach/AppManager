@@ -24,3 +24,11 @@ export type PersonType = {
   position: string
   _id?: number
 }
+
+export type UserType = {
+  email: string
+  _id: string
+  avatar?: any
+  name?: string
+  acces?: 'read-only' | 'standard' | 'admin'
+}

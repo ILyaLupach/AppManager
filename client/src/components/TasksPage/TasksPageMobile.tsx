@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
+import clsx from 'clsx'
 import { useDispatch, useSelector } from 'react-redux'
 import sortBy from '../../utils/sortBy'
 import { FilterStoreType, StoreType, TasksStoreType } from '../../types/store'
@@ -15,7 +16,7 @@ export default function ControlledAccordions() {
   const [isOpenAddForm, setIsOpenAddForm] = useState(false)
   const [changeTask, setChangeTask] =
     useState<{ isOpen: boolean, task: TasksType | null }>({ isOpen: false, task: null })
-
+  const { acces } = useSelector(({ user }: StoreType) => user)
   const { tasks, loading }: TasksStoreType = useSelector(({ tasks }: StoreType) => tasks)
   const { filterBy, searchQuery }: FilterStoreType =
     useSelector(({ filter }: StoreType) => filter)
@@ -38,7 +39,9 @@ export default function ControlledAccordions() {
     sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['asc']), filterBy, searchQuery)
 
   return (
-    <div className='mobile-tasks-page' ref={pageRef}>
+    <section
+      className={clsx('mobile-tasks-page', acces === 'read-only' && 'mobile-tasks-page_read-only')}
+      ref={pageRef}>
       {validTasks?.map((task, i, arr) => (
         <Fragment key={task._id}>
           {new Date(task.date).getDate() !== new Date(arr[i - 1]?.date).getDate() && (
@@ -52,15 +55,17 @@ export default function ControlledAccordions() {
           />
         </Fragment>
       ))}
-      <button
-        className='mobile-tasks-page__add-btn'
-        onClick={openAddForm}
-      >
-        Добавить новую задачу
-      </button>
+      {acces !== 'read-only' && (
+        <button
+          className='mobile-tasks-page__add-btn'
+          onClick={openAddForm}
+        >
+          Добавить новую задачу
+        </button>
+      )}
       {isOpenAddForm && <NewTasks onClose={closeAddForm} />}
       {changeTask.isOpen && <NewTasks onClose={closeEditForm} prevTask={changeTask.task} />}
       {loading && <MiniPreloader />}
-    </div >
+    </section >
   )
 }

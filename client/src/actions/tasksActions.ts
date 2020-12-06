@@ -4,8 +4,7 @@ import { TasksType } from "../types/global"
 import { Dispatch } from 'react'
 import { StoreType } from '../types/store'
 
-export const getAllTasks =
-  () => async (dispatch: Dispatch<ActionType>) => {
+export const getAllTasks = () => async (dispatch: Dispatch<ActionType>) => {
     dispatch({
       type: LOADING_TASKS,
       payload: true

@@ -5,7 +5,7 @@
     right: 0;
     height: 50px;
     width: 40%;
-    background-color: #fff;
+    background-color: #d4f7ff;
     border: 1px solid rgba(0, 0, 0, .75);
     color: #000;
     font-size: 22px;
@@ -15,7 +15,6 @@
     cursor: pointer;
     &:hover {
       opacity: 1;
-      background-color: #d4f7ff;
     }
   }
   &__item-actions {
@@ -73,6 +72,9 @@
   width: 100%;
   overflow: hidden;
   padding-bottom: 60px;
+  &_read-only {
+    padding-bottom: 0;
+  }
   &__date-title{
     display: block;
     text-align: center;

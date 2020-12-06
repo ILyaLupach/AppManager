@@ -11,36 +11,24 @@ export default class ServerApi {
         return response
       }).then(response => response.json())
       .catch(err => console.log("----------", " ", err))
-    return await res
+    return res
   }
 
   getAllTasks = async () => {
-    const tasks = await this.getResource("/tasks")
-      .then((res) => {
-        return res
-      })
-    return await tasks
+    return await this.getResource("/api/tasks")
   }
 
   getAllWorkshops = async () => {
-    const workshops = this.getResource("/workshops")
-      .then((res) => {
-        return res
-      })
-    return await workshops
+    return await this.getResource("/api/workshops")
   }
 
   getAllPersons = async () => {
-    const persons = await this.getResource("/persons")
-      .then((res) => {
-        return res
-      }).catch(err => console.log("----------", " ", err))
-    return await persons
+    return await this.getResource("/api/persons")
   }
 
   createNewTasks = async (data: TasksType) => {
     try {
-      const task = await fetch("/tasks", {
+      const task = await fetch("/api/tasks", {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -56,7 +44,7 @@ export default class ServerApi {
 
   addNewPerson = async (data: PersonType) => {
     try {
-      const person = await fetch("/persons", {
+      const person = await fetch("/api/persons", {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -72,7 +60,7 @@ export default class ServerApi {
 
   addNewWorkshops = async (data: WorkshopsType) => {
     try {
-      const workshop = await fetch("/workshops", {
+      const workshop = await fetch("/api/workshops", {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -87,14 +75,14 @@ export default class ServerApi {
   }
 
   deleteItem = async (id: any, url: string) => {
-    return await fetch(`/${url}/${id}`, {
+    return await fetch(`/api/${url}/${id}`, {
       method: "DELETE"
     }).then(res => true).catch(err => false)
   }
 
   updateData = async (url: string, id: any, data: any) => {
     try {
-      const body = await fetch(`/${url}/${id}`, {
+      const body = await fetch(`/api/${url}/${id}`, {
         method: "PUT",
         headers: {
           'Accept': 'application/json',
@@ -106,5 +94,71 @@ export default class ServerApi {
     } catch (error) {
       return { error }
     }
+  }
+
+  //auth
+  signUp = async (email: string, password: string, name: string) => {
+    try {
+      const data = await fetch('/api/auth/signup', {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password: String(password), name: String(name) })
+      }).then(res => res.json())
+      return { data }
+    } catch (error) {
+      return { error }
+    }
+  }
+
+  login = async (email: string, password: string) => {
+    try {
+      const data = await fetch('/api/auth/login', {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password: String(password) })
+      }).then(res => res.json())
+      return { data }
+    } catch (error) {
+      return { error }
+    }
+  }
+
+  auth = async () => {
+    try {
+      const data = await fetch('/api/auth/auth', {
+        method: "GET",
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }).then(res => res.json())
+      return { data }
+    } catch (error) {
+      return { error }
+    }
+  }
+
+  //settings
+  checkSettingsPassword = async (password: string) => {
+    try {
+      const valid = await fetch("/api/settings/password", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password: String(password) })
+      }).then(res => res.json())
+      return valid
+    } catch (error) {
+      return false
+    }
+  }
+
+  getAllUsers = async () => {
+    return await this.getResource("/api/settings/users")
   }
 }

@@ -11,12 +11,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css";
 import { StoreType } from '../../../types/store';
 import { FormControl, Input, InputLabel, ListItemText, Select, Checkbox, MenuItem } from '@material-ui/core'
-import { Autocomplete } from '@material-ui/lab';
-import { CompletedMessage, ValidateError } from '../../shared/Message';
-import { getAllPersons } from '../../../actions/personsActions';
-import api from '../../../api';
-import { updateTask } from '../../../actions/tasksActions';
-import { getAllWorkshops, updateWorkshop } from '../../../actions/workshopsActions';
+import { Autocomplete } from '@material-ui/lab'
+import { CompletedMessage, ValidateError } from '../../shared/Message'
+import { getAllPersons } from '../../../actions/personsActions'
+import api from '../../../api'
+import { updateTask } from '../../../actions/tasksActions'
+import { getAllWorkshops, updateWorkshop } from '../../../actions/workshopsActions'
 
 type Props = {
   onClose: () => void
