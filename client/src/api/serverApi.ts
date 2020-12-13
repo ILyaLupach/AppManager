@@ -1,7 +1,6 @@
-import { PersonType, TasksType, WorkshopsType } from '../types/global'
+import { PersonType, TaskFile, TasksType, WorkshopsType } from '../types/global'
 
 export default class ServerApi {
-
   getResource = async (url: string) => {
     const res = await fetch(url)
       .then(response => {
@@ -160,5 +159,45 @@ export default class ServerApi {
 
   getAllUsers = async () => {
     return await this.getResource("/api/settings/users")
+  }
+
+  //files
+  uploadFile = async (file: any, taskId: string) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('dir', taskId)
+      const data: TaskFile = await fetch('api/files/upload', {
+        method: 'POST',
+        body: formData,
+      }).then(res => res.json())
+      return { data }
+    } catch (error) {
+      return { error }
+    }
+  }
+
+  downloadFile = async (dir: string, name: string) => {
+    try {
+      const res: any = await fetch(`api/files/download?&dir=${dir}&name=${name}`)
+      if (res.status === 200) {
+        const blob = await res.blob()
+        const downloadUrl = window.URL.createObjectURL(blob)
+        return { url: downloadUrl }
+      }
+    } catch (error) {
+      return { error }
+    }
+  }
+
+  removeFile = async (dir: string, name: string) => {
+    try {
+      const { data } = await fetch(`api/files/remove?&dir=${dir}&name=${name}`, {
+        method: 'DELETE'
+      }).then(res => res.json())
+      return { data }
+    } catch (error) {
+      return { error }
+    }
   }
 }

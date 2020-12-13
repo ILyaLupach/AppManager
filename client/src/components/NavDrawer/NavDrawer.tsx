@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, withRouter, RouteComponentProps, useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -16,7 +16,6 @@ import Filter from './components/Filter'
 import Search from './components/Search'
 import { isMobileOnly } from 'react-device-detect'
 import FixedBtn from './components/FixedBtn'
-import { getAllWorkshops } from '../../actions/workshopsActions'
 import { StoreType } from '../../types/store'
 
 import './NavDrawer.scss'
@@ -60,21 +59,16 @@ const NavDrawer = ({ location }: RouteComponentProps) => {
 	const history = useHistory()
 	const classes = useStyles()
 	const { isGuest } = useSelector(({ user }: StoreType) => user)
-	const dispatch = useDispatch()
 
 	const [open, setOpen] = useState(false)
 	const [activeLink, setActiveLink] = useState('completed')
 
 	useEffect(() => {
-		dispatch(getAllWorkshops())
-	}, [])
-
-	useEffect(() => {
 		switch (location.pathname) {
 			case '/':
 				return setActiveLink('completed')
-			case '/board':
-				return setActiveLink('board')
+			case '/statistics':
+				return setActiveLink('statistics')
 			case '/persons':
 				return setActiveLink('persons')
 			case '/settings':
@@ -122,11 +116,11 @@ const NavDrawer = ({ location }: RouteComponentProps) => {
 							<ListItemText primary={'Выполненные задачи'} />
 						</ListItem>
 					</Link>
-					<Link to='/board'>
+					<Link to='/statistics'>
 						<ListItem button >
 							<ListItemIcon>
 								<ReceiptIcon
-									color={checkActiveLink('board')}
+									color={checkActiveLink('statistics')}
 								/>
 							</ListItemIcon>
 							<ListItemText primary={'Текущие задачи'} />

@@ -7,14 +7,22 @@ export type TasksType = {
   object: string
   failure: string
   fix: string
-  mark?: boolean
-  _id?: number
+  mark?: boolean | null
+  _id?: number | null
+  files: TaskFile[] | File[]
+}
+
+export type TaskFile = {
+  name: string,
+  type: string,
+  size: number,
+  path: string,
 }
 
 export type WorkshopsType = {
   name: string
   object: string[]
-  _id?: number
+  _id?: number | null
 }
 
 export type PersonType = {
@@ -22,13 +30,13 @@ export type PersonType = {
   surname: string,
   phone: string,
   position: string
-  _id?: number
+  _id?: number | null
 }
 
 export type UserType = {
   email: string
   _id: string
-  avatar?: any
-  name?: string
-  acces?: 'read-only' | 'standard' | 'admin'
+  avatar?: any | null
+  name?: string | null
+  acces?: 'read-only' | 'standard' | 'admin' | null
 }

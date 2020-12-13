@@ -11,11 +11,11 @@ export const ErrorMessage = () => {
   </div>
 )}
 
-export const CompletedMessage = () => {
+export const CompletedMessage = ({isUpdate}: {isUpdate: boolean}) => {
   return (
   <div className='message-alert'>
     <Alert severity="success">
-      Новый элемент добавлен в таблицу
+      {isUpdate ? 'Изменения приняты' : 'Новый элемент добавлен в таблицу'}
       </Alert>
   </div>
 )}

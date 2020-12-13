@@ -7,6 +7,8 @@ export const SET_FILTER: string = 'SET_FILTER'
 export const SET_QUERY: string = 'SET_QUERY'
 export const UPDATE_TASK: string = 'UPDATE_TASK'
 export const REMOVE_TASK: string = 'REMOVE_TASK'
+export const SENDING_TASK: string = 'SENDING_TASK'
+export const SHOW_COMPLETED_MESSAGE: string = 'SHOW_COMPLETED_MESSAGE'
 
 // persons types
 export const GET_ALL_PERSONS: string = 'GET_ALL_PERSONS'
@@ -68,7 +70,22 @@ interface updateTask {
 
 interface removeTask {
   type: typeof REMOVE_TASK
-  payload: number | undefined
+  payload: number | null
+}
+
+interface removeTask {
+  type: typeof REMOVE_TASK
+  payload: number | null
+}
+
+interface sendingTask {
+  type: typeof SENDING_TASK
+  payload: boolean
+}
+
+interface showCompletedMessage {
+  type: typeof SHOW_COMPLETED_MESSAGE
+  payload: boolean
 }
 
 interface setFilter {
@@ -140,4 +157,6 @@ export type ActionType =
   logOut |
   loadingAuth |
   setErrorAuth |
-  logoutAuth
+  logoutAuth |
+  sendingTask |
+  showCompletedMessage

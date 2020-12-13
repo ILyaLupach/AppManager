@@ -10,6 +10,7 @@ const personsRouter = require('./routes/persons.routes')
 const workshopsRouter = require('./routes/workshops.routes')
 const authRouter = require('./routes/auth.routes')
 const settingsRouter = require('./routes/settings.routes')
+const fileRouter = require('./routes/file.routes')
 
 const app = express()
 
@@ -22,6 +23,7 @@ app.use('/api/tasks', tasksRouter)
 app.use('/api/persons', personsRouter)
 app.use('/api/workshops', workshopsRouter)
 app.use('/api/settings', settingsRouter)
+app.use('/api/files', fileRouter)
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, 'client', 'build')))
@@ -35,8 +37,8 @@ const PORT = process.env.PORT || config.get('DEV_PORT')
 
 async function start () {
   try {
-    // await mongoose.connect('mongodb+srv://Admin:admin@cluster0-ir1ax.mongodb.net/KIP',
-    await mongoose.connect('mongodb+srv://test123:test123@clustertasks.oh6ss.mongodb.net/TaskDB',
+    await mongoose.connect('mongodb+srv://Admin:admin@cluster0-ir1ax.mongodb.net/KIP',
+    // await mongoose.connect('mongodb+srv://test123:test123@clustertasks.oh6ss.mongodb.net/TaskDB',
       {
         useNewUrlParser: true,
         useFindAndModify: false,

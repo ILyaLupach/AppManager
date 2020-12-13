@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import sortBy from '../../utils/sortBy'
 import { FilterStoreType, StoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
@@ -10,7 +10,6 @@ import NewTasks from './components/NewTaskForm';
 import { MiniPreloader } from '../Preloader';
 import { formatTime } from '../../utils/formatTime';
 import MobileTaskItem from './components/MobileTaskItem';
-import { getAllTasks } from '../../actions/tasksActions'
 
 export default function ControlledAccordions() {
   const [isOpenAddForm, setIsOpenAddForm] = useState(false)
@@ -20,14 +19,12 @@ export default function ControlledAccordions() {
   const { tasks, loading }: TasksStoreType = useSelector(({ tasks }: StoreType) => tasks)
   const { filterBy, searchQuery }: FilterStoreType =
     useSelector(({ filter }: StoreType) => filter)
-  const dispatch = useDispatch()
 
   const pageRef = useRef<any>(null)
 
   useEffect(() => {
-    !tasks.length && dispatch(getAllTasks())
     window.scrollTo(0, pageRef?.current?.scrollHeight)
-  }, [tasks.length])
+  }, [])
 
   const openAddForm = () => setIsOpenAddForm(true)
   const closeAddForm = () => setIsOpenAddForm(false)
@@ -36,14 +33,14 @@ export default function ControlledAccordions() {
   const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
 
   const validTasks: TasksType[] | null =
-    sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['asc']), filterBy, searchQuery)
+    sortBy(_.orderBy(tasks, ['date'], ['asc']), filterBy, searchQuery)
 
   return (
     <section
       className={clsx('mobile-tasks-page', acces === 'read-only' && 'mobile-tasks-page_read-only')}
       ref={pageRef}>
       {validTasks?.map((task, i, arr) => (
-        <Fragment key={task._id}>
+        <Fragment key={task._id || i}>
           {new Date(task.date).getDate() !== new Date(arr[i - 1]?.date).getDate() && (
             <span className="mobile-tasks-page__date-title">
               {`${formatTime(new Date(task.date).getDate())} / ${formatTime(new Date(task.date).getMonth() + 1)} / ${new Date(task.date).getFullYear()}`}

@@ -24,9 +24,7 @@ const MobileTaskItem = ({ task, openEditForm }: Props) => {
   }
 
   const removeItem = async () => {
-    if(!task._id) return
-    const success = await api.deleteItem(task._id, 'tasks')
-    success && dispatch(removeTask(task._id))
+    task._id && dispatch(removeTask(task._id))
   }
 
   return (

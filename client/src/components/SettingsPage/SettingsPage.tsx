@@ -23,7 +23,7 @@ const SettingsPage = () => {
   const [isOpenPasswordInput, setOpenPasswordInput] = useState(acces !== 'admin')
   const workshopsList = useSelector(({ workshops }: StoreType) => workshops.workshops)
   const [newObject, setNewObject] =
-    useState<{ workshop: number | undefined, object: string }>({ workshop: 0, object: '' })
+    useState<{ workshop?: number | null, object: string }>({ workshop: 0, object: '' })
   const [workShopsName, setWorkShopsName] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -48,7 +48,7 @@ const SettingsPage = () => {
     }
   }
 
-  const deletedPosition = async (id?: string | number) => {
+  const deletedPosition = async (id?: string | number | null) => {
     if (loading && !id) return
     setLoading(true)
     await api.deleteItem(id, 'workshops')
@@ -69,7 +69,7 @@ const SettingsPage = () => {
       setLoading(true)
       const newObjectList = [...workshop.object, newObject.object]
       await api.updateData("workshops", workshop._id, { object: newObjectList })
-      setNewObject({ object: '', workshop: undefined })
+      setNewObject({ object: '', workshop: null })
       dispatch(getAllWorkshops())
       setLoading(false)
     }
@@ -112,8 +112,8 @@ const SettingsPage = () => {
               <Typography variant='h5' component='h4'>
                 Список объектов
               </Typography>
-              {(workshopsList as WorkshopsType[]).map(workshop => (
-                <List key={workshop._id}>
+              {(workshopsList as WorkshopsType[]).map((workshop, i) => (
+                <List key={workshop._id || i}>
                   <ListItem>
                     <Typography variant="h6">
                       {workshop.name}

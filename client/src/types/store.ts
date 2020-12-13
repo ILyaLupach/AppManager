@@ -3,6 +3,8 @@ import { TasksType, WorkshopsType, PersonType, UserType } from './global'
 export type TasksStoreType = {
   loading: boolean
   tasks: Array<TasksType> | []
+  isSendingTask: boolean
+  showCompletedMessage: boolean
 }
 
 export type WorkshopsStoreType = {

@@ -4,16 +4,17 @@ import _ from 'lodash'
 import { withStyles, Theme } from '@material-ui/core/styles'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import { TasksType } from '../../../types/global'
+import { TaskFile, TasksType } from '../../../types/global'
 import { formatTime } from '../../../utils/formatTime'
 import { Button, ButtonGroup } from '@material-ui/core'
 import api from '../../../api'
 import { removeTask } from '../../../actions/tasksActions'
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
-import SettingsIcon from '@material-ui/icons/Settings'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { StoreType } from '../../../types/store'
+import FilesDialog from './FilesDialog'
+import EditIcon from '@material-ui/icons/Edit'
 
 type Props = {
   task: TasksType
@@ -60,15 +61,8 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
     }
   }, [])
 
-  const toggleChecked = async () => {
-    const { body } = await api.updateData('tasks', task._id, { mark: !checked })
-    body && setChecked(body.mark)
-  }
-
   const removeItem = async () => {
-    if(!task._id) return
-    const success = await api.deleteItem(task._id, 'tasks')
-    success && dispatch(removeTask(task._id))
+    task._id && dispatch(removeTask(task._id))
   }
 
   const handleOuterClick = (event: { target: any }) => {
@@ -78,7 +72,7 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
   }
 
   const openChangePanel = () => {
-    if(acces === 'read-only') return
+    if (acces === 'read-only') return
     setShowChangePanel(true)
     document.addEventListener('click', handleOuterClick)
     document.addEventListener('mouseover', handleOuterClick)
@@ -87,6 +81,11 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
     setShowChangePanel(false)
     document.removeEventListener('click', handleOuterClick)
     document.removeEventListener('mouseover', handleOuterClick)
+  }
+
+  const toggleChecked = async () => {
+    const { body } = await api.updateData('tasks', task._id, { mark: !checked })
+    body && setChecked(body.mark)
   }
 
   return (
@@ -117,7 +116,10 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
         {task.failure}
       </StyledTableCell>
       <StyledTableCell align="left">
-        {task.fix}
+        {task.fix} <br />
+        {!!task.files && !!task._id &&
+          <FilesDialog dir={task._id} files={(task.files as TaskFile[])} />
+        }
       </StyledTableCell>
       <StyledTableCell align="left" width={0} className='desktop-tasks-page__item-actions'>
         <ButtonGroup
@@ -136,7 +138,7 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
             className='desktop-tasks-page__item-actions-btn'
             onClick={() => openEditForm(task)}
           >
-            <SettingsIcon />
+            <EditIcon />
           </Button>
           <Button
             className='desktop-tasks-page__item-actions-btn'

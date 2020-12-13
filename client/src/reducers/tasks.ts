@@ -3,13 +3,17 @@ import {
   GET_ALL_TASKS,
   ActionType,
   UPDATE_TASK,
-  REMOVE_TASK
+  REMOVE_TASK,
+  SHOW_COMPLETED_MESSAGE,
+  SENDING_TASK
 } from '../actions/actionTypes'
 import { TasksStoreType } from '../types/store'
 
 const initialState: TasksStoreType = {
   loading: true,
   tasks: [],
+  isSendingTask: false,
+  showCompletedMessage: false,
 }
 
 export default (state: TasksStoreType = initialState, action: ActionType) => {
@@ -34,6 +38,16 @@ export default (state: TasksStoreType = initialState, action: ActionType) => {
       return {
         ...state,
         tasks: state.tasks.filter(item => item._id !== action.payload)
+      }
+    case SHOW_COMPLETED_MESSAGE:
+      return {
+        ...state,
+        showCompletedMessage: action.payload
+      }
+    case SENDING_TASK:
+      return {
+        ...state,
+        isSendingTask: action.payload
       }
     default:
       return state

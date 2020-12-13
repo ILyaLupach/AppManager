@@ -19,7 +19,6 @@ import sizeArr from '../../utils/sizeArr'
 import './TasksPage.scss'
 import DesktopTaskItem from './components/DesktopTaskItem'
 
-
 const StyledTableCell = withStyles((theme: Theme) => ({
   head: {
     fontSize: 14,
@@ -43,11 +42,6 @@ const TasksPageDesktop: React.FC = () => {
   const { filterBy, searchQuery }: FilterStoreType =
     useSelector(({ filter }: StoreType) => filter)
   const { acces } = useSelector(({ user }: StoreType) => user)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    tasks && !tasks.length && dispatch(getAllTasks())
-  }, [tasks])
 
   const openAddForm = () => setIsOpenAddForm(true)
   const closeAddForm = () => setIsOpenAddForm(false)
@@ -56,7 +50,7 @@ const TasksPageDesktop: React.FC = () => {
   const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
 
   const validTasks: TasksType[] | null =
-    sortBy(_.orderBy(sizeArr(tasks, 50), ['date'], ['desc']), filterBy, searchQuery)
+    sortBy(_.orderBy(tasks, ['date'], ['desc']), filterBy, searchQuery)
 
   return (
     <section className='page desktop-tasks-page'>
@@ -82,9 +76,9 @@ const TasksPageDesktop: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {validTasks?.map(task => (
+            {validTasks?.map((task, i) => (
               <DesktopTaskItem
-                key={task._id}
+                key={task._id || i}
                 task={task}
                 openEditForm={openEditForm}
               />
@@ -93,10 +87,7 @@ const TasksPageDesktop: React.FC = () => {
         </Table>
       </TableContainer>
       {acces !== 'read-only' && (
-        <button
-          className='desktop-tasks-page__add-btn'
-          onClick={openAddForm}
-        >
+        <button className='desktop-tasks-page__add-btn' onClick={openAddForm}>
           Добавить новую задачу
         </button>
       )}

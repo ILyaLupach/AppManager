@@ -13,7 +13,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import { WorkshopsType } from '../../../types/global'
 import { FilterStoreType, StoreType } from '../../../types/store'
-import { getAllWorkshops } from '../../../actions/workshopsActions'
 import { setFilter } from '../../../actions/tasksActions'
 
 type PropsType = {
@@ -22,15 +21,10 @@ type PropsType = {
 
 const Filter = ({ isOpen }: PropsType) => {
   const dispatch = useDispatch()
-
   const workshops: WorkshopsType[] =
     useSelector(({ workshops }: StoreType) => workshops.workshops)
   const { filterBy }: FilterStoreType = useSelector(({ filter }: StoreType) => filter)
   const [expanded, setExpanded] = useState<boolean>(false)
-
-  useEffect(() => {
-    dispatch(getAllWorkshops())
-  }, [])
 
   const changeFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(setFilter(event.target.value))
@@ -63,10 +57,10 @@ const Filter = ({ isOpen }: PropsType) => {
               control={<Radio />}
               label="Все"
             />
-            {workshops?.map(item => (
+            {workshops?.map((item, i) => (
               <FormControlLabel
                 className='nav-drawer__radio-buttom'
-                key={item._id}
+                key={item._id || i}
                 value={item.name}
                 control={<Radio />}
                 label={item.name}
