@@ -14,6 +14,11 @@ const fileRouter = require('./routes/file.routes')
 
 const app = express()
 
+// app.all('*', function(req, res, next) {
+//   if (req.headers['x-forwarded-proto'] != 'https')
+//     res.redirect('https://' + req.headers.host + req.url)
+//   else next()
+// })
 app.use(fileUpload({}))
 app.use(corsMiddleware)
 app.use(bodyParser.json())
@@ -25,13 +30,13 @@ app.use('/api/workshops', workshopsRouter)
 app.use('/api/settings', settingsRouter)
 app.use('/api/files', fileRouter)
 
-if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+// if (process.env.NODE_ENV === 'production') {
+//   app.use('/', express.static(path.join(__dirname, 'client', 'build')))
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-  })
-}
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+//   })
+// }
 
 const PORT = process.env.PORT || config.get('DEV_PORT')
 
