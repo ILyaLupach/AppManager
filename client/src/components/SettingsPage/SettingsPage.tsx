@@ -8,13 +8,16 @@ import { StoreType } from '../../types/store'
 import api from '../../api'
 import { getAllWorkshops } from '../../actions/workshopsActions'
 import { isMobileOnly } from 'react-device-detect'
-import { Box, Checkbox, Container, Grid, Icon, IconButton, ListItemSecondaryAction, Paper, Typography } from '@material-ui/core'
+import { Box, Checkbox, Container, Grid, Icon, IconButton, ListItemSecondaryAction, Paper, Tooltip, Typography } from '@material-ui/core'
 import InputBase from '@material-ui/core/InputBase'
 import Divider from '@material-ui/core/Divider'
 import DeleteIcon from '@material-ui/icons/Delete'
 import PasswordSettings from './components/PasswordSettings';
 import useStyles from './styles';
-import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined'
+import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye'
+import BrightnessAutoIcon from '@material-ui/icons/BrightnessAuto';
+import BuildIcon from '@material-ui/icons/Build';
 
 const SettingsPage = () => {
   const classes = useStyles()
@@ -183,13 +186,23 @@ const SettingsPage = () => {
                   <SearchOutlinedIcon />
                 </IconButton>
               </Paper>
-              <Typography variant='h5' component='h4' id='1qwerty'>
+              <Typography variant='h5' component='h4'>
                 Список пользователей
-                </Typography>
+                <ListItemSecondaryAction className={classes.iconsContainer}>
+                  <Tooltip title="Только чтение, запрещено редактировать, добавлять и удалять данные" placement="top">
+                    <RemoveRedEyeIcon style={{ transform: 'scale(1.1)' }} className={classes.statusIcon} />
+                  </Tooltip>
+                  <Tooltip title="Стандартные права, разрешено редактировать, добавлять и удалять любые данные. Огранниченный доступ к настройкам приложения" placement="top">
+                    <BuildIcon className={classes.statusIcon}/>
+                  </Tooltip>
+                  <Tooltip title="Права администратора, полный доступ ко всем возможностям приложения" placement="top">
+                    <BrightnessAutoIcon className={classes.statusIcon}/>
+                  </Tooltip>
+                </ListItemSecondaryAction>
+              </Typography>
               <List dense className={classes.list}>
                 {!!allUsers.length && allUsers.map(({ _id, name, email, acces }) => {
                   const labelId = `checkbox-list-secondary-label-${email}`
-                  console.log(email, acces)
                   return (
                     <ListItem key={_id} button>
                       <ListItemText

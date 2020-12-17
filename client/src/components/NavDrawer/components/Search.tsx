@@ -1,32 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import SearchIcon from '@material-ui/icons/Search'
 import TextField from '@material-ui/core/TextField'
-import { FilterStoreType, StoreType } from '../../../types/store'
-import { setSearchQuery } from '../../../actions/tasksActions'
+import { StoreType } from '../../../types/store'
+import { getAllTasks, setSearchQuery } from '../../../actions/tasksActions'
+import _ from 'lodash'
+import { useDebounce } from 'src/components/shared/Hooks'
 
-const Search: React.FC = () => {
+const Search = () => {
   const dispatch = useDispatch()
-  const { searchQuery }: FilterStoreType = useSelector(({ filter }: StoreType) => filter)
+  const { filterBy, searchQuery, limit } = useSelector(({ filter }: StoreType) => filter)
   const [isActive, setIsActive] = useState(false)
 
-  const openSearchInput = (event: React.MouseEvent<{}>): void => {
+  const debouncedSearch = useDebounce(searchQuery, 1000)
+
+  useEffect(() => {
+    dispatch(getAllTasks(limit, filterBy, debouncedSearch))
+  }, [debouncedSearch])
+
+  const openSearchInput = () => {
     setIsActive(true)
   }
 
-  const closeSearchInput = (event: React.MouseEvent<{}>): void => {
+  const closeSearchInput = () => {
     !searchQuery.length && setIsActive(false)
   }
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(setSearchQuery(event.target.value))
-  }
-
-  const removeQueryInput = (): void => {
-    dispatch(setSearchQuery(''))
   }
 
   return (

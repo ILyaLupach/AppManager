@@ -1,19 +1,26 @@
 import api from '../api'
-import { ActionType, GET_ALL_TASKS, LOADING_TASKS, REMOVE_TASK, SENDING_TASK, SET_FILTER, SET_QUERY, SHOW_COMPLETED_MESSAGE, UPDATE_TASK, UPDATE_WORKSHOP } from "./actionTypes"
+import { ActionType, GET_ALL_TASKS, LOADING_TASKS, REMOVE_TASK, SENDING_TASK, SET_FILTER, SET_LIMIT, SET_QUERY, SHOW_COMPLETED_MESSAGE, UPDATE_TASK, UPDATE_WORKSHOP } from "./actionTypes"
 import { TaskFile, TasksType } from "../types/global"
 import { Dispatch } from 'react'
 import { StoreType } from '../types/store'
 
-export const getAllTasks = () => async (dispatch: Dispatch<ActionType>) => {
-  dispatch({ type: LOADING_TASKS, payload: true })
-  const tasks: TasksType[] = await api.getAllTasks()
-  dispatch({ type: GET_ALL_TASKS, payload: tasks })
-  dispatch({ type: LOADING_TASKS, payload: false })
-}
+export const getAllTasks = (limit: number, filterBy?: string, searchQuery?: string) =>
+  async (dispatch: Dispatch<ActionType>, getState: () => StoreType) => {
+    const { tasks: { loading } } = getState()
+    if (loading) return
+    dispatch({ type: LOADING_TASKS, payload: true })
+    const tasks: TasksType[] = await api.getAllTasks(limit, filterBy, searchQuery)
+    dispatch({ type: GET_ALL_TASKS, payload: tasks })
+    dispatch({ type: LOADING_TASKS, payload: false })
+  }
 
 export const setFilter = (activeItem: string) => ({ type: SET_FILTER, payload: activeItem })
 
 export const setSearchQuery = (value: string) => ({ type: SET_QUERY, payload: value })
+
+export const setLimit = (limit: number) => ({ type: SET_LIMIT, payload: limit })
+
+export const setLoading = (loading: boolean) => ({ type: LOADING_TASKS, payload: loading })
 
 export const createNewTask =
   (task: TasksType) => async (dispatch: Dispatch<ActionType>, getState: () => StoreType) => {
@@ -64,11 +71,11 @@ export const updateTask = (task: TasksType, prevFilesList: TaskFile[] | File[] =
     }))
     const { body } =
       await api.updateData('tasks', task._id, { ...task, files: [...prevFilesList, ...filesList] })
-      if (body && task.files) {
-        for (const file of task.files) {
-          await api.uploadFile(file, body._id)
-        }
+    if (body && task.files) {
+      for (const file of task.files) {
+        await api.uploadFile(file, body._id)
       }
+    }
     if (body) {
       const newTasksList = [...tasks.tasks.filter(item => item._id !== body._id), body]
       dispatch({ type: UPDATE_TASK, payload: newTasksList })

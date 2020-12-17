@@ -19,6 +19,16 @@ export type PersonsStoreType = {
 export type FilterStoreType = {
   searchQuery: string,
   filterBy: string
+  limit: number
+}
+
+export type StatisticsStoreType = {
+  loading: false,
+  statistics: {
+		positions: any[],
+		persons: any[],
+		date: any[],
+  }
 }
 
 export type UserStoreType = {
@@ -35,4 +45,5 @@ export type StoreType = {
   filter: FilterStoreType
   persons: PersonsStoreType
   user: UserStoreType
+  statistics: StatisticsStoreType
 }

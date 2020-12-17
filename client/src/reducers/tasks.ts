@@ -10,7 +10,7 @@ import {
 import { TasksStoreType } from '../types/store'
 
 const initialState: TasksStoreType = {
-  loading: true,
+  loading: false,
   tasks: [],
   isSendingTask: false,
   showCompletedMessage: false,

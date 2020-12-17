@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { auth } from '../../actions/authActions'
 import TasksPage from '../TasksPage'
 import NavDrawer from '../NavDrawer'
@@ -13,16 +13,26 @@ import { getAllWorkshops } from 'src/actions/workshopsActions'
 
 import "./App.scss"
 import { getAllPersons } from 'src/actions/personsActions'
+import { StoreType } from 'src/types/store'
 
 export const App = () => {
   const dispatch = useDispatch()
 
+  const { filterBy, searchQuery, limit } = useSelector(({ filter }: StoreType) => filter)
+  const { tasks, loading } = useSelector(({ tasks }: StoreType) => tasks)
+
   useEffect(() => {
     dispatch(auth())
-    dispatch(getAllTasks())
+    dispatch(getAllTasks(limit))
     dispatch(getAllWorkshops())
     dispatch(getAllPersons())
   }, [])
+
+  useEffect(() => {
+    if (!tasks?.length) return
+    dispatch(getAllTasks(limit, filterBy, searchQuery))
+  }, [filterBy, limit])
+
   return (
     <Router>
       <NavDrawer />
@@ -32,7 +42,7 @@ export const App = () => {
         <Route path='/statistics' component={StatisticsPage} />
         <Route path='/' exact component={TasksPage} />
       </Switch>
-      <Auth/>
+      <Auth />
     </Router>
   )
 }

@@ -4,6 +4,7 @@ import workshops from './workshops'
 import filter from './filter'
 import persons from './persons'
 import user from './user'
+import statistics from './statistics'
 
 const rootReducer = combineReducers({
   tasks,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   filter,
   persons,
   user,
+  statistics,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

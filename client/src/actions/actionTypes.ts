@@ -9,6 +9,7 @@ export const UPDATE_TASK: string = 'UPDATE_TASK'
 export const REMOVE_TASK: string = 'REMOVE_TASK'
 export const SENDING_TASK: string = 'SENDING_TASK'
 export const SHOW_COMPLETED_MESSAGE: string = 'SHOW_COMPLETED_MESSAGE'
+export const SET_LIMIT: string = 'SET_LIMIT'
 
 // persons types
 export const GET_ALL_PERSONS: string = 'GET_ALL_PERSONS'
@@ -27,6 +28,10 @@ export const SET_USER = 'SET_USER'
 export const LOGOUT = 'LOGOUT'
 export const LOADING_AUTH = 'LOADING_AUTH'
 export const AUTH_ERROR = 'AUTH_ERROR'
+
+// statistics type
+export const SET_STATISTICS = 'SET_STATISTICS'
+export const STATISTICS_LOADING = 'STATISTICS_LOADING'
 
 interface setUser {
   type: typeof SET_USER
@@ -83,6 +88,11 @@ interface sendingTask {
   payload: boolean
 }
 
+interface setLimit {
+  type: typeof SET_LIMIT
+  payload: number
+}
+
 interface showCompletedMessage {
   type: typeof SHOW_COMPLETED_MESSAGE
   payload: boolean
@@ -96,6 +106,16 @@ interface setFilter {
 interface setQuery {
   type: typeof SET_QUERY
   payload: string
+}
+
+interface setStatisticsLoading {
+  type: typeof STATISTICS_LOADING
+  payload: boolean
+}
+
+interface getStatistics {
+  type: typeof SET_STATISTICS
+  payload: Object
 }
 
 interface getAllPerson {
@@ -159,4 +179,7 @@ export type ActionType =
   setErrorAuth |
   logoutAuth |
   sendingTask |
-  showCompletedMessage
+  showCompletedMessage |
+  setLimit |
+  setStatisticsLoading |
+  getStatistics
