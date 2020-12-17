@@ -15,7 +15,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       width: '100%',
       justifyContent: 'center',
-      marginBottom: 40
+      marginBottom: 40,
+      marginLeft: 20,
+      '& > h5': {
+        display: 'inline-flex',
+      }
     },
     gridContainer: {
       display: 'flex',
@@ -45,6 +49,12 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       fontWeight: 700,
     },
+    rotateWarning: {
+      background: 'rgba(255, 255, 255, .6)',
+      '& > img': {
+        width: 200,
+      }
+    }
   }),
 )
 

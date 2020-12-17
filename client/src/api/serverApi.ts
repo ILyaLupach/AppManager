@@ -13,8 +13,12 @@ export default class ServerApi {
     return res
   }
 
-  getAllTasks = async () => {
-    return await this.getResource("/api/tasks")
+  getAllTasks = async (limit: Number, filter?: string, search?: string) => {
+    let url: string = `/api/tasks?limit=${limit}`
+    if (filter && search && filter !== 'Все') url += `&filter=${filter}&search=${search}`
+    else if (search) url += `&search=${search}`
+    else if (filter && filter !== 'Все') url += `&filter=${filter}`
+    return await this.getResource(url)
   }
 
   getAllWorkshops = async () => {
@@ -199,5 +203,11 @@ export default class ServerApi {
     } catch (error) {
       return { error }
     }
+  }
+
+  getStatistics = async (first: Date, last: Date) => {
+    const firstDate = String(first), lastDate = String(last)
+    let url: string = `/api/tasks/statistics?firstDate=${firstDate}&lastDate=${lastDate}`
+    return await this.getResource(url)
   }
 }

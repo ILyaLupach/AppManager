@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { withStyles, Theme } from '@material-ui/core/styles'
@@ -8,13 +8,11 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import sortBy from '../../utils/sortBy'
 import { MiniPreloader } from '../Preloader'
-import { StoreType, FilterStoreType, TasksStoreType } from '../../types/store'
+import { StoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
 import AddNewTasks from './components/NewTaskForm'
-import { getAllTasks } from '../../actions/tasksActions'
-import sizeArr from '../../utils/sizeArr'
+import { setLimit, setLoading } from '../../actions/tasksActions'
 
 import './TasksPage.scss'
 import DesktopTaskItem from './components/DesktopTaskItem'
@@ -33,15 +31,30 @@ const StyledTableCell = withStyles((theme: Theme) => ({
   },
 }))(TableCell)
 
-const TasksPageDesktop: React.FC = () => {
+const TasksPageDesktop = () => {
+  const dispatch = useDispatch()
   const [isOpenAddForm, setIsOpenAddForm] = useState(false)
   const [changeTask, setChangeTask] =
     useState<{ isOpen: boolean, task: TasksType | null }>({ isOpen: false, task: null })
-
   const { tasks, loading }: TasksStoreType = useSelector(({ tasks }: StoreType) => tasks)
-  const { filterBy, searchQuery }: FilterStoreType =
-    useSelector(({ filter }: StoreType) => filter)
   const { acces } = useSelector(({ user }: StoreType) => user)
+  const pageRef = useRef<any>(null)
+
+  useEffect(() => {
+    document.addEventListener('scroll', trackScrolling);
+    return () => {
+      document.removeEventListener('scroll', trackScrolling)
+    }
+  }, [])
+
+  const trackScrolling = () => {
+    const element = pageRef.current
+    const scrollToBottom = window.pageYOffset + document.documentElement.clientHeight
+    if (element.scrollHeight - scrollToBottom < 200) {
+      setLoading(true)
+      dispatch(setLimit(100))
+    }
+  }
 
   const openAddForm = () => setIsOpenAddForm(true)
   const closeAddForm = () => setIsOpenAddForm(false)
@@ -49,11 +62,10 @@ const TasksPageDesktop: React.FC = () => {
   const openEditForm = (task: TasksType) => setChangeTask({ isOpen: true, task })
   const closeEditForm = () => setChangeTask({ isOpen: false, task: null })
 
-  const validTasks: TasksType[] | null =
-    sortBy(_.orderBy(tasks, ['date'], ['desc']), filterBy, searchQuery)
+  const tasksList = _.orderBy(tasks, ['date'], ['desc'])
 
   return (
-    <section className='page desktop-tasks-page'>
+    <section className='page desktop-tasks-page' ref={pageRef}>
       <TableContainer style={{ height: '100%' }}>
         <Table stickyHeader aria-label="customized table">
           <TableHead>
@@ -76,7 +88,7 @@ const TasksPageDesktop: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {validTasks?.map((task, i) => (
+            {tasksList?.map((task, i) => (
               <DesktopTaskItem
                 key={task._id || i}
                 task={task}

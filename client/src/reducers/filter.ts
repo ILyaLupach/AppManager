@@ -1,9 +1,10 @@
 import { FilterStoreType } from '../types/store'
-import { ActionType, SET_FILTER, SET_QUERY } from '../actions/actionTypes'
+import { ActionType, SET_FILTER, SET_LIMIT, SET_QUERY } from '../actions/actionTypes'
 
 const initialState: FilterStoreType = {
   searchQuery: '',
-  filterBy: "Все"
+  filterBy: "Все",
+  limit: 50,
 }
 
 export default (state: FilterStoreType = initialState, action: ActionType) => {
@@ -18,6 +19,11 @@ export default (state: FilterStoreType = initialState, action: ActionType) => {
         ...state,
         filterBy: action.payload
       }
+      case SET_LIMIT:
+        return {
+          ...state,
+          limit: state.limit + (action.payload as number)
+        }
     default:
       return state
   }

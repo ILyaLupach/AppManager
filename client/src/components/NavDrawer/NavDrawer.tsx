@@ -10,12 +10,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ReceiptIcon from '@material-ui/icons/Receipt'
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Filter from './components/Filter'
 import Search from './components/Search'
 import { isMobileOnly } from 'react-device-detect'
 import FixedBtn from './components/FixedBtn'
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import { StoreType } from '../../types/store'
 
 import './NavDrawer.scss'
@@ -119,11 +121,12 @@ const NavDrawer = ({ location }: RouteComponentProps) => {
 					<Link to='/statistics'>
 						<ListItem button >
 							<ListItemIcon>
-								<ReceiptIcon
+								<EqualizerIcon
+									style={{transform: 'scale(1.1)'}}
 									color={checkActiveLink('statistics')}
 								/>
 							</ListItemIcon>
-							<ListItemText primary={'Текущие задачи'} />
+							<ListItemText primary={'Статистика'} />
 						</ListItem>
 					</Link>
 					<Link to='/persons'>

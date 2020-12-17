@@ -36,9 +36,22 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       maxHeight: '100vh',
       overflowY: 'auto',
+      '& > h4': {
+        position: 'relative',
+      }
     },
-    list: {
-
+    statusIcon: {
+      color: 'rgba(0, 0, 0, 0.6)',
+      '&:hover': {
+        color: '#000'
+      }
+    },
+    list: {},
+    iconsContainer: {
+      marginRight: -2,
+      '& > *': {
+        margin: 2,
+      }
     },
     listItem: {
       width: '100%',
