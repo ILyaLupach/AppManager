@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const authMiddleware = require('../middleware/auth.middleware')
-const User = require('../models/User')
+const User = require('../models/user')
 
 const router = Router()
 
@@ -12,7 +12,6 @@ router.post('/signup',
   [
     check('email', 'Uncorrect email').isEmail(),
     check('password', 'password must be more than 6 characters').isLength({ min: 6 }),
-
   ],
   async (req, res) => {
     try {

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     gridContainer: {
       flexDirection: 'column',
       width: '100%',
-      maxHeight: '100vh',
+      maxHeight: '100%',
       overflowY: 'auto',
       '& > h4': {
         position: 'relative',
