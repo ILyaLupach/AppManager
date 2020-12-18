@@ -26,7 +26,7 @@ export const CustomTooltip = ({ active, payload, label }: any) => {
 
 export const CustomizedAxisTick = ({payload, x, y}: any) => (
   <g transform={`translate(${x},${y})`}>
-    <text x={0} y={0} dy={16} textAnchor="end" fill="#000" dx={5} transform="rotate(-30)">
+    <text x={0} y={0} dy={10} textAnchor="end" fill="#000" dx={-3} transform="rotate(-70)">
       {payload.value}
     </text>
   </g>

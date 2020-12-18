@@ -1,29 +1,37 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { isMobileOnly } from 'react-device-detect';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
-      padding: '20px 20px 0 60px',
+      padding: isMobileOnly ? '20px 0px 0 0px' : '20px 20px 0 60px',
       justifyContent: 'space-around',
     },
     wrapper: {
       display: 'flex',
       justifyContent: 'space-around',
     },
+    datepikerWrapper: {
+      display: 'flex',
+    },
     title: {
       display: 'flex',
       width: '100%',
       justifyContent: 'center',
       marginBottom: 40,
-      marginLeft: 20,
+      marginLeft: isMobileOnly ? 90 : 20,
       '& > h5': {
         display: 'inline-flex',
-      }
+      },
+      flexWrap: 'wrap',
+      zIndex: 3,
     },
     gridContainer: {
       display: 'flex',
       justifyContent: 'center',
+      flexDirection: 'column',
+      overflow: 'hidden'
     },
     itemTitle: {
       display: 'flex',
@@ -34,10 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     itemWrapper: {
       display: 'flex',
-      width: '100%',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       paddingRight: 10,
       marginBottom: 60,
+      overflowX: 'visible',
+      overflowY: 'hidden',
     },
     dataPicker: {
       margin: '5px 10px 0',

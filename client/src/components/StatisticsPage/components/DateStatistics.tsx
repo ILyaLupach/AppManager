@@ -17,9 +17,9 @@ const DateStatistics = () => {
   const widthFix = isMobileOnly ? 50 : 70
   if (!statistics.date?.length || statistics.date?.length < 6) return null
   return (
-    <Grid>
+    <Grid className={classes.gridContainer}>
       <Box className={classes.itemTitle}>
-        <Typography variant="h5">
+        <Typography variant="h5" align='center'>
           Общий график заявленных неисправностей за год
         </Typography>
       </Box>
@@ -30,7 +30,7 @@ const DateStatistics = () => {
           height={620}
           data={statistics.date}
           margin={{
-            top: 20, right: 20, left: 30, bottom: 5,
+            top: 20, right: 10, left: -20, bottom: 5,
           }}
         >
           <defs>
@@ -42,7 +42,7 @@ const DateStatistics = () => {
           ))}
           </defs>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" interval={0} height={120} tick={<CustomizedAxisTick />} />
+          <XAxis dataKey="name" interval={0} height={160} tick={<CustomizedAxisTick />} />
           <YAxis type="number" />
           <YAxis />
           <Tooltip />

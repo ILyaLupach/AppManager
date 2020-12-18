@@ -14,7 +14,7 @@ const PersonsStatistics = () => {
 
   if (!statistics.persons?.length) return null
   return (
-    <Grid>
+    <Grid className={classes.gridContainer}>
       <Box className={classes.itemTitle} style={{ marginLeft: 20 }}>
         <Typography variant="subtitle1">
           Активность сотрудников
@@ -24,14 +24,14 @@ const PersonsStatistics = () => {
       <Box className={classes.itemWrapper}>
         <BarChart
           width={statistics.persons.length * 50}
-          height={420}
+          height={500}
           data={statistics.persons}
           margin={{
-            top: 5, right: 0, left: 0, bottom: 5,
+            top: 5, right: 0, left: -30, bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" interval={0} height={120} tick={<CustomizedAxisTick />} />
+          <XAxis dataKey="name" interval={0} height={160} tick={<CustomizedAxisTick />} />
           <YAxis type="number" />
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey="value" fill="#8884d8" width={40}>
