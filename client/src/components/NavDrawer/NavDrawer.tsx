@@ -26,7 +26,8 @@ import Acces from './components/Acces'
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			display: 'flex',
+			// display: 'flex',
+			display: 'none',
 		},
 		drawer: {
 			width: 260,
