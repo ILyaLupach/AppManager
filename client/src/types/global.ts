@@ -31,6 +31,7 @@ export type PersonType = {
   phone: string,
   position: string
   _id?: number | null
+  avatar?: string | null
 }
 
 export type UserType = {

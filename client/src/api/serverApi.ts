@@ -189,8 +189,9 @@ export default class ServerApi {
         const downloadUrl = window.URL.createObjectURL(blob)
         return { url: downloadUrl }
       }
+      return {}
     } catch (error) {
-      return { error }
+      return { error: error }
     }
   }
 

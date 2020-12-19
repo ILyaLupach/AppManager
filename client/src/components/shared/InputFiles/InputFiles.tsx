@@ -8,9 +8,12 @@ import './InputFile.scss'
 
 type Props = {
   onChooseFiles: (file: File[]) => void
+  text?: string
+  multiple?: boolean
+  accept?: string
 }
 
-const FileInput = ({ onChooseFiles }: Props) => {
+const FileInput = ({ onChooseFiles, text, multiple, accept }: Props) => {
   const [files, setFiles] = useState<File[]>([])
 
   useEffect(() => {
@@ -18,6 +21,7 @@ const FileInput = ({ onChooseFiles }: Props) => {
   }, [files])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.currentTarget?.files) return
     const filesList = [...files, ...e.currentTarget.files]
     setFiles(filesList)
     onChooseFiles(filesList)
@@ -41,9 +45,13 @@ const FileInput = ({ onChooseFiles }: Props) => {
   return (
     <div className='input-file'>
       <label className="input-file__btn">
-        <input type="file" multiple onChange={onChange} accept="image/*, application/pdf, .doc" />
+        <input type="file"
+          multiple={multiple}
+          onChange={onChange}
+          accept={accept ? accept : "image/*, application/pdf, .doc"}
+        />
         <AttachFileIcon style={{ width: 16, height: 16, marginRight: 5 }} />
-        <span>Прикрепить файлы</span>
+        <span>{text ? text : 'Прикрепить файлы'}</span>
       </label>
       {!!files?.length && (
         <div className="input-file__files-list">

@@ -70,7 +70,7 @@ const FileItem = ({ file, dir }: ItemProps) => {
     try {
       const { url }: any = await api.downloadFile(dir, file.name)
       url && setFileUrl(url)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const getImage = (str: string) => {

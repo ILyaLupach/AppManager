@@ -10,7 +10,7 @@ import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css";
 import { StoreType } from '../../../types/store';
-import { FormControl, Input, InputLabel, ListItemText, Select, Checkbox, MenuItem } from '@material-ui/core'
+import { FormControl, Input, InputLabel, ListItemText, Select, Checkbox, MenuItem, Box } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
 import { CompletedMessage, ValidateError } from '../../shared/Message'
 import { createNewTask, updateTask } from '../../../actions/tasksActions'
@@ -264,7 +264,7 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
               rows="4"
               label="Принятые меры"
             />
-            <div className="input-file__files-list">
+            <Box className="input-file__files-list">
               {!!prevFilesList?.length && !!task._id &&
                 (prevFilesList as TaskFile[]).map(item => (
                   <PrevFileItem
@@ -275,8 +275,8 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
                   />
                 ))
               }
-            </div>
-            <FileInput onChooseFiles={handleFiles} />
+            </Box>
+            <FileInput onChooseFiles={handleFiles} multiple={true} />
           </form>
         </DialogContent>
       )}

@@ -5,11 +5,11 @@ const personSchema = new Schema({
 	name: String,
 	surname: String,
 	phone: String,
-	position: String
+	position: String,
+	avatar: {type: String, default: ''},
 });
 
 
 const person = mongoose.model("person", personSchema);
-
 
 module.exports = person;
