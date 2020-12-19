@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexBasis: '66%'
     },
     large: {
-      width: theme.spacing(15),
-      height: theme.spacing(15),
-      borderRadius: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '0 !important',
       '& > img': {
         height: 'auto',
         width: isMobileOnly ? 80 : 90,

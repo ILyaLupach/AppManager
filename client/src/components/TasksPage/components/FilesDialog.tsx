@@ -30,7 +30,7 @@ const FilesDialog = ({ files, dir }: Props) => {
       </div>
 
         <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-          <List>
+          <List style={{overflow: 'hidden'}}>
             {files.map((file, i) => (
               <FileItem key={i} file={file} dir={String(dir)} />
             ))}

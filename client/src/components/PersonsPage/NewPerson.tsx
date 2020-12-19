@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import TextField from '@material-ui/core/TextField'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { createNewPerson, updatePerson } from '../../actions/personsActions'
 import { PersonType } from '../../types/global'
@@ -94,7 +94,6 @@ const NewPerson = ({ person, onClose }: Props) => {
   const onEditPerson = async () => {
     const { name, surname, phone, position, avatar: prevAvatar } = newPerson
     setLoading(true)
-    console.log(prevAvatar , person?.avatar)
     if (
       name !== person?.name ||
       surname !== person?.surname ||
@@ -106,8 +105,8 @@ const NewPerson = ({ person, onClose }: Props) => {
         await api.removeFile(String(person._id), person.avatar)
       }
       const { error, body } = await api.updateData('persons', person?._id, newPerson)
+      avatar && person?._id && await api.uploadFile(avatar, String(person._id))
       if (body) {
-        avatar && person?._id && await api.uploadFile(avatar, String(person._id))
         dispatch(updatePerson(body))
         setCompleted(true)
         setLoading(false)

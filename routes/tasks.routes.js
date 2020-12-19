@@ -91,16 +91,16 @@ router.get("/statistics", async (req, res) => {
 			}, persons.map(p => ({ name: p.surname, value: 0 })))
 
 		const newDate = new Date()
-		const allTasksYear = await Tasks.find({
-			$or: [{
-				date: {
-					'$gte': new Date(newDate.setMonth(newDate.getMonth() - 12)),
-					'$lte': new Date()
-				}
-			}]
-		})
 
-		const getMonthAndPositionsList = () => {
+		const getMonthAndPositionsList = async () => {
+			const allTasksYear = await Tasks.find({
+				$or: [{
+					date: {
+						'$gte': new Date(newDate.setMonth(newDate.getMonth() - 12)),
+						'$lte': new Date()
+					}
+				}]
+			})
 			if (!workshops.length || !allTasksYear.length) return []
 			const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
 				"Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]

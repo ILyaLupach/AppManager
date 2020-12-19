@@ -4,9 +4,10 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeTask } from '../../../actions/tasksActions'
 import api from '../../../api'
-import { TasksType } from '../../../types/global'
+import { TaskFile, TasksType } from '../../../types/global'
 import { StoreType } from '../../../types/store'
 import { getTimeWork } from '../../../utils/formatTime'
+import FilesDialog from './FilesDialog'
 
 type Props = {
   task: TasksType
@@ -47,6 +48,9 @@ const MobileTaskItem = ({ task, openEditForm }: Props) => {
           <span className='mobile-tasks-page__text'>{task.failure}</span>
           <span className='mobile-tasks-page__subtitle'> Корректирующие действия: </span>
           <span className='mobile-tasks-page__text'>{task.fix}</span>
+          {!!task.files && !!task._id &&
+          <FilesDialog dir={task._id} files={(task.files as TaskFile[])} />
+        }
         </div>
       </AccordionDetails>
       {acces !== 'read-only' && (

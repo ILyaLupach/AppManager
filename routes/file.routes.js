@@ -40,7 +40,6 @@ router.get('/download', async (req, res) => {
       return res.status(400).json({ message: 'file not found' })
     }
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ message: 'Download error' })
   }
 })
@@ -51,7 +50,6 @@ router.delete('/remove', async (req, res) => {
     fs.unlinkSync(filePath)
     return res.json({ message: 'File was deleted' })
   } catch (error) {
-    console.log(error)
     return res.status(400).json({ message: 'file is not empty' })
   }
 })

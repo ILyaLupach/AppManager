@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import NewPerson from './NewPerson';
 import api from '../../api';
 import { useDispatch } from 'react-redux';
 import Avatar from './Avatar'
 import { removePerson } from '../../actions/personsActions';
-import { Box } from '@material-ui/core';
 import { PersonType } from 'src/types/global';
 import useStyles from './styles';
 

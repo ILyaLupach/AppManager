@@ -37,8 +37,8 @@ const PORT = process.env.PORT || config.get('DEV_PORT')
 
 async function start () {
   try {
-    // await mongoose.connect('mongodb+srv://Admin:admin@cluster0-ir1ax.mongodb.net/KIP',
-    await mongoose.connect('mongodb+srv://test123:test123@clustertasks.oh6ss.mongodb.net/TaskDB',
+    await mongoose.connect('mongodb+srv://Admin:admin@cluster0-ir1ax.mongodb.net/KIP',
+    // await mongoose.connect('mongodb+srv://test123:test123@clustertasks.oh6ss.mongodb.net/TaskDB',
       {
         useNewUrlParser: true,
         useFindAndModify: false,
@@ -52,4 +52,4 @@ async function start () {
   }
 }
 
-start()
+start();

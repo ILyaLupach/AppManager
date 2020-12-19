@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 300,
       paddingLeft: 20,
       paddingRight: 10,
+      overflow: 'auto',
       '& > * > span': {
         width: '100%',
         whiteSpace: 'nowrap',
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
     fileBlock: {
       display: 'flex',
       alignItems: 'center',
+      width: '100%',
     }
   })
 )

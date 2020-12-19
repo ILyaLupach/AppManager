@@ -7,8 +7,8 @@ const rimraf = require('rimraf')
 
 router.get("/", async (req, res) => {
 	try {
-		const person = await Person.find()
-		res.send(person)
+		const persons = await Person.find()
+		res.send(persons)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })
 	}
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
 		const item = await Person.create(req.body)
 		const person = await Person.findOne({
 			name: item.name, surname: item.surname, phone: item.phone
-		})
+		}) // убедиться что такой костыль необходим
 		res.send(person)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })
@@ -40,7 +40,6 @@ router.delete("/:id", async (req, res) => {
 	try {
 		const person = await Person.deleteOne({ _id: req.params.id })
 		const dirPath = path.join(__dirname, `../files/${req.params.id}`)
-		console.log(dirPath)
 		if (fs.existsSync(dirPath)) {
 			rimraf(dirPath, () => { })
 		}
