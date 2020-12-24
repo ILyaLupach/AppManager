@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import PositionStatistics from './components/PositionsStatistics'
 import DatePicker from "react-datepicker";
-import { Grid, Typography, Container, Backdrop, CircularProgress, Box } from '@material-ui/core';
+import { Grid, Typography, Container, Box } from '@material-ui/core';
 import useStyles from './styles';
 import TimeStatistics from './components/PersonsStatistics';
 import DateStatistics from './components/DateStatistics';
-import { isMobileOnly, withOrientationChange } from 'react-device-detect'
+import { isMobileOnly } from 'react-device-detect'
 import { getStatistics } from 'src/actions/statisticsActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { StoreType } from 'src/types/store'
 import { MiniPreloader } from '../Preloader'
-import RotateIcon from './images/phone-rotation.svg'
-import LandscapeWarning from './components/LandscapeWarning';
-
-type Props = { isLandscape: boolean }
 
 const minDate = new Date()
 const maxDate = new Date()
 
-const StatisticsPage = ({ isLandscape }: Props) => {
+const StatisticsPage = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [firstDate, setFirstDate] =
@@ -28,7 +24,7 @@ const StatisticsPage = ({ isLandscape }: Props) => {
 
   useEffect(() => {
     dispatch(getStatistics(firstDate, lastDate))
-  }, [firstDate, lastDate])
+  }, [dispatch, firstDate, lastDate])
 
   return (
     <section className={isMobileOnly ? 'mobile-page' : 'page'}>
@@ -46,7 +42,8 @@ const StatisticsPage = ({ isLandscape }: Props) => {
                 locale='ru'
                 dateFormat='dd.MM.yyyy'
                 className={classes.dataPicker}
-              />{!isMobileOnly && <Typography variant='h5'>до</Typography>}
+              />
+              {!isMobileOnly && <Typography variant='h5'>до</Typography>}
               <DatePicker
                 selected={lastDate}
                 onChange={(date: Date) => setLastDate(date)}
@@ -77,4 +74,4 @@ const StatisticsPage = ({ isLandscape }: Props) => {
   )
 }
 
-export default withOrientationChange(StatisticsPage)
+export default StatisticsPage

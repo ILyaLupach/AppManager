@@ -48,7 +48,7 @@ const PersonsItem = ({ person }: Props) => {
               <span>{`${person.surname} ${person.name}`}</span>
             </Typography>
             <Typography variant="body2" gutterBottom>
-              Должность: <span style={{color: 'crimson', fontWeight: 500}}>{person.position}</span>
+              <span style={{color: 'crimson', fontWeight: 500}}>{person.position}</span>
             </Typography>
             <Typography variant="body2">
               <a className={"persons-list__details-phone"} href={`tel:${person.phone}`}>

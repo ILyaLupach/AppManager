@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexBasis: '66%'
     },
     large: {
-      width: '100%',
-      height: '100%',
+      width: '100% !important',
+      height: '100% !important',
       borderRadius: '0 !important',
       '& > img': {
         height: 'auto',

@@ -77,10 +77,16 @@ router.get("/statistics", async (req, res) => {
 		const positionAndQuantityList = !tasks.length || !workshops.length ? [] :
 			tasks.reduce((acc, value) => {
 				return acc.map(o => {
-					if (value.position === o.name) o.value++
+					if (value.position === o.name) {
+						o.value++
+						if (!o.objects[value.object]) {
+							o.objects[value.object] = 1
+						}
+						o.objects[value.object]++
+					}
 					return o
 				})
-			}, workshops.map(p => ({ name: p.name, value: 0 })))
+			}, workshops.map(p => ({ name: p.name, value: 0, objects: {} })))
 
 		const personAndQuantityList = !tasks.length || !persons.length ? [] :
 			tasks.reduce((acc, value) => {
@@ -91,16 +97,16 @@ router.get("/statistics", async (req, res) => {
 			}, persons.map(p => ({ name: p.surname, value: 0 })))
 
 		const newDate = new Date()
+		const allTasksYear = await Tasks.find({
+			$or: [{
+				date: {
+					'$gte': new Date(newDate.setMonth(newDate.getMonth() - 12)),
+					'$lte': new Date()
+				}
+			}]
+		})
 
-		const getMonthAndPositionsList = async () => {
-			const allTasksYear = await Tasks.find({
-				$or: [{
-					date: {
-						'$gte': new Date(newDate.setMonth(newDate.getMonth() - 12)),
-						'$lte': new Date()
-					}
-				}]
-			})
+		const getMonthAndPositionsList = () => {
 			if (!workshops.length || !allTasksYear.length) return []
 			const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
 				"Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
