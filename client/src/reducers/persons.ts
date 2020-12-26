@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { PersonsStoreType } from '../types/store'
 import { ActionType, ADD_NEW_PERSON, UPDATE_PERSON, GET_ALL_PERSONS, LOADING_PERSONS, REMOVE_PERSON } from '../actions/actionTypes'
 

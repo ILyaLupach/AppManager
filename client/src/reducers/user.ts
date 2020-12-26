@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { ActionType, AUTH_ERROR, LOADING_AUTH, LOGOUT, SET_USER } from '../actions/actionTypes'
 import { UserType } from '../types/global'
 import { UserStoreType } from '../types/store'
@@ -36,8 +37,6 @@ export default (state = defaultState, action: ActionType) => {
         ...state,
         error: action.payload
       }
-    case LOGOUT:
-      return defaultState
     default:
       return state
   }

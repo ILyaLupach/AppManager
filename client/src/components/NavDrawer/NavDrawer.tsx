@@ -9,7 +9,6 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import ReceiptIcon from '@material-ui/icons/Receipt'
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -17,7 +16,6 @@ import Filter from './components/Filter'
 import Search from './components/Search'
 import { isMobileOnly } from 'react-device-detect'
 import FixedBtn from './components/FixedBtn'
-import AssessmentIcon from '@material-ui/icons/Assessment';
 import { StoreType } from '../../types/store'
 
 import './NavDrawer.scss'
@@ -78,7 +76,7 @@ const NavDrawer = ({ location }: RouteComponentProps) => {
 			default:
 				return history.push('/')
 		}
-	}, [location.pathname])
+	}, [history, location.pathname])
 
 	const isOpenHandler = () => {
 		setOpen(!open)

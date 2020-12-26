@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable jsx-a11y/img-redundant-alt */
+import React, { useCallback, useEffect, useState } from 'react'
 import { HighlightOff } from '@material-ui/icons'
 import pdfIcon from './images/pdf-icon.svg'
 import docIcon from './images/doc-icon.svg'
@@ -15,16 +16,19 @@ type Props = {
 
 const PrevFileItem = ({ dir, file, removeFile }: Props) => {
   const [fileUrl, setFileUrl] = useState('')
-  useEffect(() => {
-    getFile()
-  }, [])
 
-  const getFile = async () => {
+  const getFile = useCallback(async () => {
     try {
       const { url }: any = await api.downloadFile(dir, file.name)
       url && setFileUrl(url)
-    } catch (error) {}
-  }
+    } catch (error) { }
+  },
+    [dir, file.name],
+  )
+
+  useEffect(() => {
+    getFile()
+  }, [getFile])
 
   const getImage = (str: string) => {
     if (!str) return

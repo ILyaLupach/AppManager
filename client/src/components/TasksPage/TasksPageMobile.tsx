@@ -2,8 +2,7 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
 import clsx from 'clsx'
 import { useDispatch, useSelector } from 'react-redux'
-import sortBy from '../../utils/sortBy'
-import { FilterStoreType, StoreType, TasksStoreType } from '../../types/store'
+import { StoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
 import NewTasks from './components/NewTaskForm';
 import { MiniPreloader } from '../Preloader';
@@ -29,13 +28,14 @@ export default function ControlledAccordions() {
       return setFirstVisit(false)
     }
     window.scrollTo(0, pageRef?.current?.scrollHeight - currentScroll - 300)
-  }, [tasks.length])
+  }, [currentScroll, firstVisit, tasks.length])
 
   useEffect(() => {
     document.addEventListener('scroll', trackScrolling);
     return () => {
       document.removeEventListener('scroll', trackScrolling)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const trackScrolling = () => {

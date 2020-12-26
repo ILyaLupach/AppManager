@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/jsx-no-target-blank */
+/* eslint-disable jsx-a11y/alt-text */
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -64,16 +66,19 @@ const useStyles = makeStyles((theme: Theme) =>
 const FileItem = ({ file, dir }: ItemProps) => {
   const classes = useStyles()
   const [fileUrl, setFileUrl] = useState('')
-  useEffect(() => {
-    getFile()
-  }, [])
 
-  const getFile = async () => {
+  const getFile = useCallback(async () => {
     try {
       const { url }: any = await api.downloadFile(dir, file.name)
       url && setFileUrl(url)
     } catch (error) { }
-  }
+  },
+    [dir, file.name],
+  )
+
+  useEffect(() => {
+    getFile()
+  }, [getFile])
 
   const getImage = (str: string) => {
     if (str.includes('.doc')) {

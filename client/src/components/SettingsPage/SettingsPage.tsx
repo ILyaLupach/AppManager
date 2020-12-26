@@ -35,7 +35,7 @@ const SettingsPage = () => {
   useEffect(() => {
     !workshopsList && dispatch(getAllWorkshops())
     getAllUsers()
-  }, [])
+  }, [dispatch, workshopsList])
 
   const getAllUsers = async () => {
     const users = await api.getAllUsers()

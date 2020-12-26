@@ -1,6 +1,6 @@
 import { TasksType } from '../types/global'
 
-export default (tasks: TasksType[], filterBy: string, searchQuery: string): TasksType[] | null => {
+const sortBy = (tasks: TasksType[], filterBy: string, searchQuery: string): TasksType[] | null => {
     if (searchQuery.length > 1) {
         searchQuery = searchQuery.toLowerCase()
         tasks = tasks.filter(
@@ -16,3 +16,5 @@ export default (tasks: TasksType[], filterBy: string, searchQuery: string): Task
     const validTasks: TasksType[] = tasks.filter(item => item.position === filterBy)
     return validTasks.length ? validTasks : null
 }
+
+export default sortBy

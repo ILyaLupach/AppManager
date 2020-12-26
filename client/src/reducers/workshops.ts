@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { WorkshopsStoreType } from '../types/store'
 import { ActionType, GET_ALL_WORKSHOPS, REMOVE_WORKSHOP, UPDATE_WORKSHOP } from '../actions/actionTypes'
 

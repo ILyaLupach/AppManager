@@ -7,7 +7,6 @@ import SearchIcon from '@material-ui/icons/Search'
 import TextField from '@material-ui/core/TextField'
 import { StoreType } from '../../../types/store'
 import { getAllTasks, setSearchQuery } from '../../../actions/tasksActions'
-import _ from 'lodash'
 import { useDebounce } from 'src/components/shared/Hooks'
 
 const Search = () => {
@@ -19,7 +18,7 @@ const Search = () => {
 
   useEffect(() => {
     dispatch(getAllTasks(limit, filterBy, debouncedSearch))
-  }, [debouncedSearch])
+  }, [debouncedSearch, dispatch, filterBy, limit])
 
   const openSearchInput = () => {
     setIsActive(true)

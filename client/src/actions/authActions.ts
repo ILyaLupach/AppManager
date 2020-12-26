@@ -1,5 +1,5 @@
 import api from '../api'
-import { ActionType, AUTH_ERROR, LOADING_AUTH, LOADING_TASKS, LOGOUT, SET_USER } from "./actionTypes"
+import { ActionType, AUTH_ERROR, LOADING_AUTH, SET_USER } from "./actionTypes"
 import { Dispatch } from 'react'
 import { clearHash } from '../utils/location'
 

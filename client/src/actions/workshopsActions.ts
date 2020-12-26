@@ -1,5 +1,5 @@
 import api from '../api'
-import { ActionType, GET_ALL_WORKSHOPS, REMOVE_PERSON, REMOVE_WORKSHOP, UPDATE_PERSON, UPDATE_WORKSHOP } from "./actionTypes"
+import { ActionType, GET_ALL_WORKSHOPS, REMOVE_WORKSHOP, UPDATE_WORKSHOP } from "./actionTypes"
 import { WorkshopsType } from "../types/global"
 import { Dispatch } from 'react'
 import { StoreType } from '../types/store'

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import {
   LOADING_TASKS,
   GET_ALL_TASKS,

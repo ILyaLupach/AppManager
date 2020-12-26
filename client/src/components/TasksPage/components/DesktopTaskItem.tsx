@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import _ from 'lodash'
 import { withStyles, Theme } from '@material-ui/core/styles'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
@@ -59,6 +58,7 @@ const DesktopTaskItem = ({ task, openEditForm }: Props) => {
       document.removeEventListener('click', handleOuterClick)
       document.removeEventListener('mouseover', handleOuterClick)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const removeItem = async () => {

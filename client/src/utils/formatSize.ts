@@ -1,5 +1,3 @@
-import { FormatSize } from '@material-ui/icons'
-
 const formatSize = (size: number) => {
   if(size > 1024*1024*1024) {
       return (size/(1024*1024*1024)).toFixed(1)+"Gb"

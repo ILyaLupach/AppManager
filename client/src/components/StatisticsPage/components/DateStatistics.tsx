@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, AreaChart, Area } from 'recharts';

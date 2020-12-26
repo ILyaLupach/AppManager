@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { FilterStoreType } from '../types/store'
 import { ActionType, SET_FILTER, SET_LIMIT, SET_QUERY } from '../actions/actionTypes'
 

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { ActionType, SET_STATISTICS, STATISTICS_LOADING } from '../actions/actionTypes'
 import { StatisticsStoreType } from '../types/store'
 

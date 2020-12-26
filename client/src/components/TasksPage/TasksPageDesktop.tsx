@@ -45,6 +45,7 @@ const TasksPageDesktop = () => {
     return () => {
       document.removeEventListener('scroll', trackScrolling)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const trackScrolling = () => {

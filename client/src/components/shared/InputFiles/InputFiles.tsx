@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from 'react'
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import HighlightOff from '@material-ui/icons/HighlightOff';
@@ -18,6 +19,7 @@ const FileInput = ({ onChooseFiles, text, multiple, accept }: Props) => {
 
   useEffect(() => {
     onChooseFiles(files?.length ? files : [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

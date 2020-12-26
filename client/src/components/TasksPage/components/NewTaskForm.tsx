@@ -58,7 +58,7 @@ const AddNewTasks = ({ onClose, prevTask }: Props) => {
 
   useEffect(() => {
     showCompletedMessage && setTimeout(() => onClose(), 2000)
-  }, [showCompletedMessage])
+  }, [onClose, showCompletedMessage])
 
   const handlePersons = (event: React.ChangeEvent<{ value: string[] | unknown }>) => {
     const value = event.target.value as string[] | null

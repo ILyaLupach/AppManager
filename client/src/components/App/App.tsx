@@ -19,19 +19,19 @@ export const App = () => {
   const dispatch = useDispatch()
 
   const { filterBy, searchQuery, limit } = useSelector(({ filter }: StoreType) => filter)
-  const { tasks, loading } = useSelector(({ tasks }: StoreType) => tasks)
+  const { tasks } = useSelector(({ tasks }: StoreType) => tasks)
 
   useEffect(() => {
     dispatch(auth())
     dispatch(getAllTasks(limit))
     dispatch(getAllWorkshops())
     dispatch(getAllPersons())
-  }, [])
+  }, [dispatch, limit])
 
   useEffect(() => {
     if (!tasks?.length) return
     dispatch(getAllTasks(limit, filterBy, searchQuery))
-  }, [filterBy, limit])
+  }, [dispatch, filterBy, limit, searchQuery, tasks?.length])
 
   return (
     <Router>
