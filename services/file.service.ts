@@ -1,13 +1,12 @@
-const { rejects } = require('assert')
-const config = require('config')
-const fs = require('fs')
-const path = require('path')
+import { TaskFile } from '../types'
+import fs from 'fs'
+import path from 'path'
 
 class FileService {
 
-  getPath = (file) => path.join(__dirname, `../files/${file.path}`)
+  getPath = (file: TaskFile) => path.join(__dirname, `../files/${file.path}`)
 
-  createDir = (file) => {
+  createDir = (file: TaskFile) => {
     const filePath = this.getPath(file)
     return new Promise((resolve, reject) => {
       try {
@@ -23,7 +22,7 @@ class FileService {
     })
   }
 
-  removeFile = (file) => {
+  removeFile = (file: TaskFile) => {
     const filePath = this.getPath(file)
     file.type === 'dir'
       ? fs.rmdirSync(filePath)
@@ -32,4 +31,4 @@ class FileService {
 }
 
 const newService = new FileService()
-module.exports = newService
+export default newService

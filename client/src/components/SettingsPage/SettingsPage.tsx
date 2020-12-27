@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem'
@@ -12,12 +12,12 @@ import { Box, Checkbox, Container, Grid, Icon, IconButton, ListItemSecondaryActi
 import InputBase from '@material-ui/core/InputBase'
 import Divider from '@material-ui/core/Divider'
 import DeleteIcon from '@material-ui/icons/Delete'
-import PasswordSettings from './components/PasswordSettings';
-import useStyles from './styles';
+import PasswordSettings from './components/PasswordSettings'
+import useStyles from './styles'
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined'
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye'
-import BrightnessAutoIcon from '@material-ui/icons/BrightnessAuto';
-import BuildIcon from '@material-ui/icons/Build';
+import BrightnessAutoIcon from '@material-ui/icons/BrightnessAuto'
+import BuildIcon from '@material-ui/icons/Build'
 
 const SettingsPage = () => {
   const classes = useStyles()
@@ -29,18 +29,24 @@ const SettingsPage = () => {
     useState<{ workshop?: number | null, object: string }>({ workshop: 0, object: '' })
   const [workShopsName, setWorkShopsName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [search, setSearch] = useState('')
 
   const [allUsers, setUsers] = useState<UserType[]>([])
 
+  const getAllUsers = useCallback(
+    async () => {
+      const users = await api.getAllUsers()
+      users && setUsers(users)
+    }, [],
+  )
+
+  useEffect(() => {
+    getAllUsers()
+  }, [getAllUsers])
+
   useEffect(() => {
     !workshopsList && dispatch(getAllWorkshops())
-    getAllUsers()
   }, [dispatch, workshopsList])
-
-  const getAllUsers = async () => {
-    const users = await api.getAllUsers()
-    users && setUsers(users)
-  }
 
   const addNewWorkshop = async () => {
     if (workShopsName && workShopsName.length > 3 && !loading) {
@@ -87,6 +93,15 @@ const SettingsPage = () => {
     newUsersList[idx] = body
     setUsers(newUsersList)
     setLoading(false)
+  }
+
+  const findPerson = (value: string) => {
+    setSearch(value)
+  }
+
+  const sortUsers = (): UserType[] => {
+    if (!search) return allUsers
+    return allUsers.filter(({email, name}) => (email.includes(search) || name?.includes(search)))
   }
 
   return (
@@ -173,8 +188,8 @@ const SettingsPage = () => {
                 <InputBase
                   className={classes.input}
                   placeholder="Найти пользователя"
-                  onChange={e => setWorkShopsName(e.target.value)}
-                  value={workShopsName}
+                  onChange={e => findPerson(e.target.value)}
+                  value={search}
                 />
                 <Divider className={classes.divider} orientation="vertical" />
                 <IconButton
@@ -193,15 +208,15 @@ const SettingsPage = () => {
                     <RemoveRedEyeIcon style={{ transform: 'scale(1.1)' }} className={classes.statusIcon} />
                   </Tooltip>
                   <Tooltip title="Стандартные права, разрешено редактировать, добавлять и удалять любые данные. Огранниченный доступ к настройкам приложения" placement="top">
-                    <BuildIcon className={classes.statusIcon}/>
+                    <BuildIcon className={classes.statusIcon} />
                   </Tooltip>
                   <Tooltip title="Права администратора, полный доступ ко всем возможностям приложения" placement="top">
-                    <BrightnessAutoIcon className={classes.statusIcon}/>
+                    <BrightnessAutoIcon className={classes.statusIcon} />
                   </Tooltip>
                 </ListItemSecondaryAction>
               </Typography>
               <List dense className={classes.list}>
-                {!!allUsers.length && allUsers.map(({ _id, name, email, acces }) => {
+                {!!allUsers.length && sortUsers().map(({ _id, name, email, acces }) => {
                   const labelId = `checkbox-list-secondary-label-${email}`
                   return (
                     <ListItem key={_id} button>

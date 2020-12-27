@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+import mongoose, { Document } from "mongoose";
+import { TasksType } from '../types';
 const Schema = mongoose.Schema;
 
 const taskSchema = new Schema({
@@ -11,9 +12,9 @@ const taskSchema = new Schema({
 	failure: { type: String, required: true },
 	fix: { type: String, required: true },
 	mark: Boolean,
-	files: { type: Schema.Types.Mixed, default: []},
+	files: { type: Schema.Types.Mixed, default: [] },
 })
 
-const tasks = mongoose.model("tasks", taskSchema);
+const tasks = mongoose.model<TasksType & Document>("tasks", taskSchema);
 
-module.exports = tasks;
+export default tasks

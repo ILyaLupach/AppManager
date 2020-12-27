@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model, Document } from 'mongoose'
+import { UserType } from '../types'
 
 const UserSchema = new Schema({
   email: { type: String, required: true, unique: true },
@@ -8,6 +9,6 @@ const UserSchema = new Schema({
   acces: { type: String, default: 'read-only'}
 })
 
-const user = model('user', UserSchema)
+const user = model<UserType & Document>('user', UserSchema)
 
-module.exports = user
+export default user

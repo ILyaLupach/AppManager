@@ -1,9 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const path = require('path')
-const fs = require('fs')
-const Person = require("../models/person")
-const rimraf = require('rimraf')
+import path from 'path';
+import fs from 'fs';
+import Person from "../models/person";
+import rimraf from 'rimraf';
+import { PersonType } from '../types';
+import {Document} from 'mongoose'
 
 router.get("/", async (req, res) => {
 	try {
@@ -49,4 +51,4 @@ router.delete("/:id", async (req, res) => {
 	}
 })
 
-module.exports = router
+export default  router

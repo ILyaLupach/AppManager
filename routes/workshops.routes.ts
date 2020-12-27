@@ -1,6 +1,6 @@
-const express = require("express")
+import express from "express"
 const router = express.Router()
-const workshop = require("../models/workshops")
+import workshop from "../models/workshops"
 
 router.get("/", (req, res) => {
 	workshop.find()
@@ -25,9 +25,9 @@ router.put("/:id", (req, res) => {
 })
 router.delete("/:id", (req, res) => {
 	workshop.deleteOne({ _id: req.params.id })
-		.then((workshop) => {
-			res.send(workshop)
+		.then(() => {
+			res.send(true)
 		})
 })
 
-module.exports = router
+export default router

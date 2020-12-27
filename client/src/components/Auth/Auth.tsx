@@ -28,8 +28,8 @@ const Auth = ({ location }: RouteComponentProps) => {
   }, [location.hash, authType, isGuest])
 
   useEffect(() => {
-    error && dispatch(setAuthError())
-  }, [password, email, authType, error, dispatch])
+    dispatch(setAuthError())
+  }, [password, email, authType, dispatch])
 
   const onSubmit = async () => {
     switch (authType) {

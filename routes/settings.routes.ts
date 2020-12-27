@@ -1,6 +1,7 @@
-const express = require("express")
+import express from "express"
+import User from '../models/user'
+
 const router = express.Router()
-const User = require('../models/user')
 
 router.post("/password", (req, res) => {
 	res.send(req.body.password === '123456')
@@ -34,4 +35,4 @@ router.delete("/users/:id", async (req, res) => {
 	}
 })
 
-module.exports = router
+export default router

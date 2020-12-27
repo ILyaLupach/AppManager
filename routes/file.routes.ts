@@ -1,13 +1,27 @@
-const { Router } = require('express')
-const path = require('path')
-const fs = require('fs')
-const Tasks = require("../models/tasks")
+import { Request, Response } from 'express'
+import { Router } from 'express'
+import path from 'path'
+import fs from 'fs'
 
 const router = Router()
 
-router.post('/upload', async (req, res) => {
+router.get('/download', async (req: Request, res: Response) => {
   try {
-    const { file } = req.files
+    const filePath = path.join(__dirname, `../files/${req.query.dir}/${req.query.name}`)
+    if (fs.existsSync(filePath)) {
+      return res.download(filePath, (req.query.name as string))
+    } else {
+      return res.status(400).json({ message: 'file not found' })
+    }
+  } catch (error) {
+    return res.status(500).json({ message: 'Download error' })
+  }
+})
+
+router.post('/upload', async (req: any, res: Response) => {
+  try {
+    const file = req.files?.file
+    if (!file) return
     const dirPath = path.join(__dirname, `../files/${req.body.dir}`)
     if (!fs.existsSync(dirPath)) {
       await fs.mkdirSync(dirPath)
@@ -24,23 +38,10 @@ router.post('/upload', async (req, res) => {
       size: file.size,
       path: `${req.body.dir}/${file.name}`,
     }
-    res.json(data)
+    return res.json(data)
   } catch (err) {
     console.log(err)
-    res.status(500).json({ message: 'server error' })
-  }
-})
-
-router.get('/download', async (req, res) => {
-  try {
-    const filePath = path.join(__dirname, `../files/${req.query.dir}/${req.query.name}`)
-    if (fs.existsSync(filePath)) {
-      return res.download(filePath, req.query.name)
-    } else {
-      return res.status(400).json({ message: 'file not found' })
-    }
-  } catch (error) {
-    return res.status(500).json({ message: 'Download error' })
+    return res.status(500).json({ message: 'server error' })
   }
 })
 
@@ -54,4 +55,4 @@ router.delete('/remove', async (req, res) => {
   }
 })
 
-module.exports = router
+export default  router

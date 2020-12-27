@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken')
-const config = require('config')
+import { Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
+import config from 'config'
 
-const auth = (req, res, next) => {
+const auth = (req: any, res: Response, next: NextFunction) => {
   if (req.method === 'OPTIONS') return next()
   try {
     const token = req.headers.authorization.split(' ')[1]
@@ -14,4 +15,4 @@ const auth = (req, res, next) => {
   }
 }
 
-module.exports = auth
+export default auth

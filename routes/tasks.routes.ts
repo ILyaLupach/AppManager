@@ -1,13 +1,25 @@
-const express = require("express")
+import express, { Request } from "express"
 const router = express.Router()
-const path = require('path')
-const fs = require('fs')
-const rimraf = require('rimraf')
-const Tasks = require("../models/tasks")
-const Person = require("../models/person")
-const Workshop = require("../models/workshops")
+import path from 'path'
+import fs from 'fs'
+import rimraf from 'rimraf'
+import Tasks from "../models/tasks"
+import Person from "../models/person"
+import Workshop from "../models/workshops"
 
-router.get("/", async (req, res) => {
+interface SearchRequest extends Request {
+	query: {
+		limit: string, search: string, filter: string
+	}
+}
+
+interface StatisticsRequest extends Request {
+	query: {
+		firstDate: string, lastDate: string
+	}
+}
+
+router.get("/", async (req: SearchRequest, res) => {
 	try {
 		let { limit, search, filter } = req.query
 		let tasks = await Tasks.find().sort({ date: 1 })
@@ -32,7 +44,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
 	try {
 		const task = await Tasks.create(req.body)
-		const { date, fix, failure, position } = req.body
+		const { date, fix, failure } = req.body
 		const newTask = await Tasks.findOne({ date, fix, failure })
 		res.send(newTask)
 	} catch (error) {
@@ -63,7 +75,7 @@ router.delete("/:id", async (req, res) => {
 	}
 })
 
-router.get("/statistics", async (req, res) => {
+router.get("/statistics", async (req: StatisticsRequest, res) => {
 	try {
 		let { firstDate, lastDate } = req.query
 		const min = new Date(firstDate),
@@ -75,7 +87,7 @@ router.get("/statistics", async (req, res) => {
 		const workshops = await Workshop.find()
 
 		const positionAndQuantityList = !tasks.length || !workshops.length ? [] :
-			tasks.reduce((acc, value) => {
+			tasks.reduce((acc: any[], value: any) => {
 				return acc.map(o => {
 					if (value.position === o.name) {
 						o.value++
@@ -86,15 +98,15 @@ router.get("/statistics", async (req, res) => {
 					}
 					return o
 				})
-			}, workshops.map(p => ({ name: p.name, value: 0, objects: {} })))
+			}, workshops.map((p: any) => ({ name: p.name, value: 0, objects: {} })))
 
 		const personAndQuantityList = !tasks.length || !persons.length ? [] :
-			tasks.reduce((acc, value) => {
+			tasks.reduce((acc: any[], value: any) => {
 				return acc.map(o => {
 					if (value.name.join('').includes(o.name)) o.value++
 					return o
 				})
-			}, persons.map(p => ({ name: p.surname, value: 0 })))
+			}, persons.map((p: any) => ({ name: p.surname, value: 0 })))
 
 		const newDate = new Date()
 		const allTasksYear = await Tasks.find({
@@ -111,8 +123,8 @@ router.get("/statistics", async (req, res) => {
 			const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
 				"Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
 			let positionsList = {}
-			workshops.forEach(w => positionsList = { ...positionsList, [w.name]: 0 })
-			return allTasksYear.reduce((acc, value) => {
+			workshops.forEach((w: any) => positionsList = { ...positionsList, [w.name]: 0 })
+			return allTasksYear.reduce((acc: any[], value: any) => {
 				const newDate = new Date(value.date)
 				const date = `${months[newDate.getMonth()]} ${newDate.getFullYear()}`
 				if (!acc.length) {
@@ -137,4 +149,4 @@ router.get("/statistics", async (req, res) => {
 	}
 })
 
-module.exports = router
+export default router
