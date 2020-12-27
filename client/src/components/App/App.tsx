@@ -17,21 +17,17 @@ import { StoreType } from 'src/types/store'
 
 export const App = () => {
   const dispatch = useDispatch()
-
   const { filterBy, searchQuery, limit } = useSelector(({ filter }: StoreType) => filter)
-  const { tasks } = useSelector(({ tasks }: StoreType) => tasks)
 
   useEffect(() => {
     dispatch(auth())
-    dispatch(getAllTasks(limit))
     dispatch(getAllWorkshops())
     dispatch(getAllPersons())
-  }, [dispatch, limit])
+  }, [dispatch])
 
   useEffect(() => {
-    if (!tasks?.length) return
     dispatch(getAllTasks(limit, filterBy, searchQuery))
-  }, [dispatch, filterBy, limit, searchQuery, tasks?.length])
+  }, [dispatch, filterBy, limit, searchQuery])
 
   return (
     <Router>

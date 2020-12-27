@@ -71,8 +71,8 @@ const NewPerson = ({ person, onClose }: Props) => {
     if (name && surname && phone && position) {
       const { error, person } =
         await api.addNewPerson({ ...newPerson, avatar: avatar ? avatar.name : '' })
-      const body = await api.uploadFile(avatar, person._id)
-      if (person && body) {
+        avatar && await api.uploadFile(avatar, person._id)
+      if (person) {
         dispatch(createNewPerson(person))
         setCompleted(true)
         setTimeout(() => {

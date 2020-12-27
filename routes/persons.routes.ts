@@ -4,8 +4,6 @@ import path from 'path';
 import fs from 'fs';
 import Person from "../models/person";
 import rimraf from 'rimraf';
-import { PersonType } from '../types';
-import {Document} from 'mongoose'
 
 router.get("/", async (req, res) => {
 	try {
@@ -19,10 +17,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
 	try {
 		const item = await Person.create(req.body)
-		const person = await Person.findOne({
-			name: item.name, surname: item.surname, phone: item.phone
-		}) // убедиться что такой костыль необходим
-		res.send(person)
+		res.send(item)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })
 	}
@@ -30,8 +25,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
 	try {
-		const person = await Person.findByIdAndUpdate({ _id: req.params.id }, req.body)
-		const updatedPerson = await Person.findOne({ _id: req.params.id })
+		const updatedPerson = await Person.findByIdAndUpdate({ _id: req.params.id }, req.body)
 		res.send(updatedPerson)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })

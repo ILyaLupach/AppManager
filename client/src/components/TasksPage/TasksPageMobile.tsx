@@ -40,8 +40,7 @@ export default function ControlledAccordions() {
 
   const trackScrolling = () => {
     if (window.pageYOffset === 0) {
-      setLoading(true)
-      dispatch(setLimit(100))
+      !loading && dispatch(setLimit(100))
     }
   }
 

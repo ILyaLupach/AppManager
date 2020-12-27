@@ -44,9 +44,7 @@ router.get("/", async (req: SearchRequest, res) => {
 router.post("/", async (req, res) => {
 	try {
 		const task = await Tasks.create(req.body)
-		const { date, fix, failure } = req.body
-		const newTask = await Tasks.findOne({ date, fix, failure })
-		res.send(newTask)
+		res.send(task)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })
 	}
@@ -54,8 +52,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
 	try {
-		await Tasks.findByIdAndUpdate({ _id: req.params.id }, req.body)
-		const task = await Tasks.findOne({ _id: req.params.id })
+		const task = await Tasks.findByIdAndUpdate({ _id: req.params.id }, req.body)
 		res.send(task)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })

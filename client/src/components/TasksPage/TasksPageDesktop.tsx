@@ -12,7 +12,7 @@ import { MiniPreloader } from '../Preloader'
 import { StoreType, TasksStoreType } from '../../types/store'
 import { TasksType } from '../../types/global'
 import AddNewTasks from './components/NewTaskForm'
-import { setLimit, setLoading } from '../../actions/tasksActions'
+import { setLimit } from '../../actions/tasksActions'
 
 import './TasksPage.scss'
 import DesktopTaskItem from './components/DesktopTaskItem'
@@ -52,8 +52,7 @@ const TasksPageDesktop = () => {
     const element = pageRef.current
     const scrollToBottom = window.pageYOffset + document.documentElement.clientHeight
     if (element.scrollHeight - scrollToBottom < 200) {
-      setLoading(true)
-      dispatch(setLimit(100))
+      !loading && dispatch(setLimit(100))
     }
   }
 
