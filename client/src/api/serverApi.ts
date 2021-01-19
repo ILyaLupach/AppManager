@@ -1,3 +1,4 @@
+import getCookie from 'src/utils/getCookie'
 import { PersonType, TaskFile, TasksType, WorkshopsType } from '../types/global'
 
 export default class ServerApi {
@@ -133,10 +134,12 @@ export default class ServerApi {
   }
 
   auth = async () => {
+    const token = getCookie('token')
+    console.log('token', token)
     try {
       const data = await fetch('/api/auth/auth', {
         method: "GET",
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${token}` },
       }).then(res => res.json())
       return { data }
     } catch (error) {

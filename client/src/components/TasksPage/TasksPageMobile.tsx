@@ -28,7 +28,8 @@ export default function ControlledAccordions() {
       return setFirstVisit(false)
     }
     window.scrollTo(0, pageRef?.current?.scrollHeight - currentScroll - 300)
-  }, [currentScroll, firstVisit, tasks.length])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks.length])
 
   useEffect(() => {
     document.addEventListener('scroll', trackScrolling);

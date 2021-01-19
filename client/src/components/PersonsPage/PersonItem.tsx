@@ -6,11 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import NewPerson from './NewPerson';
 import api from '../../api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Avatar from './Avatar'
 import { removePerson } from '../../actions/personsActions';
 import { PersonType } from 'src/types/global';
 import useStyles from './styles';
+import { StoreType } from 'src/types/store';
 
 type Props = {
   person: PersonType
@@ -20,6 +21,7 @@ const PersonsItem = ({ person }: Props) => {
   const classes = useStyles()
   const [showEditForm, setShowEditForm] = useState(false)
   const dispatch = useDispatch()
+  const { acces } = useSelector(({ user }: StoreType) => user)
 
   const openEditForm = () => {
     setShowEditForm(true)
@@ -48,24 +50,26 @@ const PersonsItem = ({ person }: Props) => {
               <span>{`${person.surname} ${person.name}`}</span>
             </Typography>
             <Typography variant="body2" gutterBottom>
-              <span style={{color: 'crimson', fontWeight: 500}}>{person.position}</span>
+              <span style={{ color: 'crimson', fontWeight: 500 }}>{person.position}</span>
             </Typography>
             <Typography variant="body2">
               <a className={"persons-list__details-phone"} href={`tel:${person.phone}`}>
-                Телефон:  <span style={{color: 'green', fontWeight: 500}}>{person.phone}</span>
+                Телефон:  <span style={{ color: 'green', fontWeight: 500 }}>{person.phone}</span>
               </a>
             </Typography>
 
-            <Grid item>
-              <DialogActions style={{margin: '5px 0 -10px'}}>
-                <Button onClick={openEditForm} color="primary">
-                  <h5>редактировать</h5>
-                </Button>
-                <Button onClick={onRemovePerson} color="primary">
-                  <h5>удалить</h5>
-                </Button>
-              </DialogActions>
-            </Grid>
+            {acces !== 'read-only' && (
+              <Grid item>
+                <DialogActions style={{ margin: '5px 0 -10px' }}>
+                  <Button onClick={openEditForm} color="primary">
+                    <h5>редактировать</h5>
+                  </Button>
+                  <Button onClick={onRemovePerson} color="primary">
+                    <h5>удалить</h5>
+                  </Button>
+                </DialogActions>
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Paper>

@@ -21,7 +21,7 @@ router.get('/download', async (req: Request, res: Response) => {
 router.post('/upload', async (req: any, res: Response) => {
   try {
     const file = req.files?.file
-    if (!file) return
+    if (!file) return res.status(400).json({ message: 'not file' })
     const dirPath = path.join(__dirname, `../files/${req.body.dir}`)
     if (!fs.existsSync(dirPath)) {
       await fs.mkdirSync(dirPath)

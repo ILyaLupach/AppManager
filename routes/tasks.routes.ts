@@ -26,10 +26,10 @@ router.get("/", async (req: SearchRequest, res) => {
 		if (filter) {
 			tasks = tasks.filter(task => task.position === filter)
 		}
-		if (search) {
+		if (search && tasks.length) {
 			search = search.toLowerCase()
-			tasks = tasks.filter(task =>
-				task.name.map(str => str.toLowerCase()).join('').includes(search) ||
+			tasks = tasks.filter(
+				task => task.name.map(str => str?.toLowerCase()).join('').includes(search) ||
 				task.position.toLowerCase().includes(search) ||
 				task.object.toLowerCase().includes(search) ||
 				task.failure.toLowerCase().includes(search) ||
@@ -44,6 +44,10 @@ router.get("/", async (req: SearchRequest, res) => {
 router.post("/", async (req, res) => {
 	try {
 		const task = await Tasks.create(req.body)
+		const { date, fix, failure } = req.body
+		const newTask = await Tasks.findOne({ date, fix, failure })
+		res.send(newTask)
+		res.send(newTask)
 		res.send(task)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })
@@ -52,7 +56,8 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
 	try {
-		const task = await Tasks.findByIdAndUpdate({ _id: req.params.id }, req.body)
+		await Tasks.findByIdAndUpdate({ _id: req.params.id }, req.body)
+		const task = await Tasks.findOne({ _id: req.params.id })
 		res.send(task)
 	} catch (error) {
 		res.status(500).json({ message: 'server error' })

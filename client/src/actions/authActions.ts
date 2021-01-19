@@ -20,7 +20,7 @@ export const signUp =
       })
     }
     if (token && user) {
-      localStorage.setItem('token', token)
+      document.cookie = `token=${token}`
       dispatch({
         type: SET_USER,
         payload: user
@@ -49,7 +49,7 @@ export const login = (email: string, password: string) =>
       })
     }
     if (token && user) {
-      localStorage.setItem('token', token)
+      document.cookie = `token=${token}`
       dispatch({
         type: SET_USER,
         payload: user
@@ -76,7 +76,7 @@ export const auth = () => async (dispatch: Dispatch<ActionType>) => {
       })
     }
     if (token && user) {
-      localStorage.setItem('token', token)
+      document.cookie = `token=${token}`
       dispatch({
         type: SET_USER,
         payload: user
@@ -94,6 +94,6 @@ export const setAuthError = (error?: string) => ({
 })
 
 export const logOut = () => {
-  localStorage.removeItem('token')
+  document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
   window.location.reload()
 }

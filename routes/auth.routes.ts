@@ -85,7 +85,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response) => {
     try {
-      const user = await User.findOne({ _id: (<any>req).user._id })
+      const user = await User.findOne({ _id: (<any>req).user.id })
       if (!user) return res.status(401).json({ message: 'Auth error' })
       const token = jwt.sign({ id: user.id }, config.get('secretKey'), { expiresIn: '30d' })
       return res.json({
