@@ -5,7 +5,6 @@
     "target": "es5",
     "module": "commonjs",
     "declaration": true,
-    "noImplicitAny": true,
     "removeComments": true,
     "experimentalDecorators": true,
     "rootDir": ".",
@@ -14,7 +13,8 @@
     "newLine": "LF",
     "noEmitOnError": true,
     "strict": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "noImplicitAny": false,
   },
   "exclude": [
     "node_modules"

@@ -6,6 +6,7 @@ import rimraf from 'rimraf'
 import Tasks from "../models/tasks"
 import Person from "../models/person"
 import Workshop from "../models/workshops"
+import { TasksType } from '../types'
 
 interface SearchRequest extends Request {
 	query: {
@@ -24,16 +25,17 @@ router.get("/", async (req: SearchRequest, res) => {
 		let { limit, search, filter } = req.query
 		let tasks = await Tasks.find().sort({ date: 1 })
 		if (filter) {
-			tasks = tasks.filter(task => task.position === filter)
+			tasks = tasks.filter((task: TasksType) => task.position === filter)
 		}
 		if (search && tasks.length) {
 			search = search.toLowerCase()
-			tasks = tasks.filter(
-				task => task.name.map(str => str?.toLowerCase()).join('').includes(search) ||
+			tasks = tasks.filter((task: TasksType) =>
+				task.name.map((str: string) => str?.toLowerCase()).join('').includes(search) ||
 				task.position.toLowerCase().includes(search) ||
 				task.object.toLowerCase().includes(search) ||
 				task.failure.toLowerCase().includes(search) ||
-				task.fix.toLowerCase().includes(search))
+				task.fix.toLowerCase().includes(search)
+			)
 		}
 		res.send(tasks.slice(-limit))
 	} catch (error) {
