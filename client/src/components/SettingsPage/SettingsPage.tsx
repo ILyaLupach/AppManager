@@ -62,6 +62,7 @@ const SettingsPage = () => {
     setLoading(true)
     await api.deleteItem(id, 'workshops')
     setLoading(false)
+    dispatch(getAllWorkshops())
   }
 
   const deletedObject = async (workshop: WorkshopsType, i: number) => {
@@ -101,7 +102,15 @@ const SettingsPage = () => {
 
   const sortUsers = (): UserType[] => {
     if (!search) return allUsers
-    return allUsers.filter(({email, name}) => (email.includes(search) || name?.includes(search)))
+    return allUsers.filter(({ email, name }) => (email.includes(search) || name?.includes(search)))
+  }
+
+  const deletedUser = async (id: string) => {
+    if (loading) return
+    setLoading(true)
+    await api.deleteItem(id, 'auth')
+    getAllUsers()
+    setLoading(false)
   }
 
   return (
@@ -244,6 +253,13 @@ const SettingsPage = () => {
                           onChange={() => toggleChecked(_id, 'admin')}
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
+                        <IconButton
+                          edge='end'
+                          aria-label="delete"
+                          onClick={() => deletedUser(_id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
                   )

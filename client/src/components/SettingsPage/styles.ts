@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     list: {},
     iconsContainer: {
+      paddingRight: 34,
       marginRight: -2,
       '& > *': {
         margin: 2,

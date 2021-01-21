@@ -103,4 +103,15 @@ router.get(
     }
   })
 
+  router.delete("/:id", async (req, res) => {
+    try {
+      await User.deleteOne({ _id: req.params.id })
+      res.send(true)
+    } catch (error) {
+      res.status(500).json({ message: 'server error' })
+    }
+  })
+
+
+
   export default router
